@@ -2,6 +2,8 @@ import Navbar from "./components/Navbar";
 import HeroSection from "./components/HeroSection";
 import PromoSection from "./components/PromoSection";
 import SponsorPreview from "./components/SponsorPreview";
+import Kolaborasi from "./components/Kolaborasi";
+import Paket from "./components/Paket";
 
 const LandingPage = () => {
 
@@ -11,6 +13,8 @@ const LandingPage = () => {
       <HeroSection />
       <PromoSection />
       <SponsorPreview />
+      <Kolaborasi />
+      <Paket />
     </>
   );
 };
