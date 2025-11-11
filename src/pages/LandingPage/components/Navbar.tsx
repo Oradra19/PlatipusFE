@@ -1,54 +1,124 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
+import logo from "../../../assets/Logo.png";
 
 const Navbar = () => {
+  const [menuOpen, setMenuOpen] = useState(false);
+
   return (
-    <header className="w-full fixed top-0 left-0 z-50 bg-[#0B1B2B] border-b border-slate-700 shadow-sm">
-      <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-        {/* Logo */}
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-md bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center text-[#0B1B2B] font-bold text-lg">
-            P
-          </div>
-          <span className="text-lg font-semibold text-yellow-400 tracking-wide">
+    <header className="w-full fixed top-0 left-0 z-50 bg-biru-tua border-b border-slate-700 shadow-sm">
+      <div className="max-w-7xl mx-auto px-8 lg:px-12 h-16 flex items-center justify-between">
+        <div className="flex items-center gap-3 md:gap-4">
+          <img
+            src={logo}
+            alt="Logo Platipus"
+            className="w-9 h-9 object-contain"
+          />
+          <span className="text-lg font-semibold text-emas tracking-wide">
             Platipus
           </span>
         </div>
 
-        {/* Navigation menu */}
-        <nav className="flex items-center gap-8 text-sm text-slate-200">
-          <a href="#home" className="hover:text-yellow-400 transition">
+        {/* Navigation(Desktop) */}
+        <nav className="hidden md:flex items-center gap-10 text-sm text-putih">
+          <a href="#home" className="hover:text-emas transition">
             Beranda
           </a>
-          <a href="#sponsor" className="hover:text-yellow-400 transition">
+          <a href="#sponsor" className="hover:text-emas transition">
             Daftar Sponsor
           </a>
-          <a href="#paket" className="hover:text-yellow-400 transition">
+          <a href="#paket" className="hover:text-emas transition">
             Paket
           </a>
-          <a href="#ulasan" className="hover:text-yellow-400 transition">
+          <a href="#ulasan" className="hover:text-emas transition">
             Ulasan
           </a>
-          <a href="#tentang" className="hover:text-yellow-400 transition">
+          <a href="#tentang" className="hover:text-emas transition">
             Tentang Kami
           </a>
         </nav>
 
-        {/* Buttons */}
-        <div className="flex items-center gap-3">
+        <div className="hidden md:flex items-center gap-4">
           <Link
             to="/login"
-            className="px-4 py-1.5 text-sm bg-yellow-600 hover:bg-yellow-500 text-[#0B1B2B] font-medium rounded transition"
+            className="px-4 py-1.5 text-sm bg-emas hover:bg-yellow-300 text-biru-tua font-medium rounded transition"
           >
             Masuk
           </Link>
           <Link
             to="/register"
-            className="px-4 py-1.5 text-sm text-yellow-400 border border-yellow-500 rounded hover:bg-yellow-500/10 transition"
+            className="px-4 py-1.5 text-sm font-medium text-yellow-400 border border-emas rounded hover:bg-emas/10 transition"
           >
             Daftar
           </Link>
         </div>
+
+        {/* Mobile menu*/}
+        <button
+          className="md:hidden text-emas text-2xl focus:outline-none"
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
+          {menuOpen ? "✕" : "☰"}
+        </button>
       </div>
+
+      {/* Mobile menu dropdown */}
+      {menuOpen && (
+        <div className="md:hidden bg-biru-tua border-t border-slate-700 py-4 px-8 space-y-3 text-putih">
+          <a
+            href="#home"
+            className="block hover:text-emas transition"
+            onClick={() => setMenuOpen(false)}
+          >
+            Beranda
+          </a>
+          <a
+            href="#sponsor"
+            className="block hover:text-emas transition"
+            onClick={() => setMenuOpen(false)}
+          >
+            Daftar Sponsor
+          </a>
+          <a
+            href="#paket"
+            className="block hover:text-emas transition"
+            onClick={() => setMenuOpen(false)}
+          >
+            Paket
+          </a>
+          <a
+            href="#ulasan"
+            className="block hover:text-emas transition"
+            onClick={() => setMenuOpen(false)}
+          >
+            Ulasan
+          </a>
+          <a
+            href="#tentang"
+            className="block hover:text-emas transition"
+            onClick={() => setMenuOpen(false)}
+          >
+            Tentang Kami
+          </a>
+
+          <div className="flex flex-col gap-2 pt-3 border-t border-slate-700">
+            <Link
+              to="/login"
+              className="block text-center px-4 py-2 bg-emas text-biru-tua font-medium rounded hover:bg-yellow-300 transition"
+              onClick={() => setMenuOpen(false)}
+            >
+              Masuk
+            </Link>
+            <Link
+              to="/register"
+              className="block text-center px-4 py-2 text-emas border border-emas rounded hover:bg-emas/10 transition"
+              onClick={() => setMenuOpen(false)}
+            >
+              Daftar
+            </Link>
+          </div>
+        </div>
+      )}
     </header>
   );
 };
