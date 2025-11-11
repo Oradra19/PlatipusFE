@@ -1,4 +1,5 @@
 import Navbar from "./components/Navbar";
+import HeroSection from "./components/HeroSection";
 
 const LandingPage = () => {
   console.log("LandingPage dimuat"); // tes log
@@ -6,6 +7,7 @@ const LandingPage = () => {
   return (
     <>
       <Navbar />
+      <HeroSection />
     </>
   );
 };
