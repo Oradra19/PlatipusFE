@@ -1,5 +1,12 @@
+import { useNavigate } from "react-router-dom";
 
 const HeroSection = () => {
+  const navigate = useNavigate();
+
+  const handleGoToLogin = () => {
+    navigate("/login");
+  };
+
   const sponsorLogos = [
     "/logos/logo1.png",
     "/logos/logo2.png",
@@ -19,7 +26,7 @@ const HeroSection = () => {
   ];
 
   return (
-    <section className="pt-40 md:pt-48 pb-40 md:pb-48 bg-putih text-center overflow-hidden">
+    <section id="beranda" className="pt-40 md:pt-48 pb-40 md:pb-48 bg-putih text-center overflow-hidden">
       <div className="max-w-6xl mx-auto px-6 sm:px-10 lg:px-16">
         <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-biru-tua leading-snug mb-6">
           Bangun Kolaborasi Sukses antara{" "}
@@ -33,16 +40,22 @@ const HeroSection = () => {
           transparan.
         </p>
 
-        <div className="flex flex-col sm:flex-row justify-center items-center gap-5 sm:gap-7 mb-24">
-          <button className="w-full sm:w-auto px-8 py-3 text-sm md:text-base bg-emas text-biru-tua font-semibold rounded-xl hover:bg-yellow-400 transition">
-            Mulai Sebagai Sponsor
-          </button>
-          <button className="w-full sm:w-auto px-8 py-3 text-sm md:text-base bg-biru-tua text-putih border border-slate-700 font-semibold rounded-xl hover:bg-biru-tua/80 transition">
-            Mulai Sebagai EO
-          </button>
+        <div className="flex flex-col sm:flex-row justify-center items-center gap-5 sm:gap-7 mb-24 w-full max-w-md mx-auto">
+            <button
+                onClick={handleGoToLogin}
+                className="flex-1 px-6 py-2.5 text-sm md:text-base bg-emas text-biru-tua font-semibold rounded-2xl hover:bg-yellow-400 transition"
+            >
+                Mulai Sebagai Sponsor
+            </button>
+            <button
+                onClick={handleGoToLogin}
+                className="flex-1 px-6 py-2.5 text-sm md:text-base bg-biru-tua text-putih border border-slate-700 font-semibold rounded-2xl hover:bg-biru-tua/80 transition"
+            >
+                Mulai Sebagai EO
+            </button>
         </div>
 
-        {/* Logo Sponsor */}
+        {/*  Logo Sponsor  */}
         <div className="relative overflow-hidden mb-8 md:mb-10">
           <div className="flex items-center gap-10 sm:gap-12 whitespace-nowrap animate-scroll-left">
             {[...sponsorLogos, ...sponsorLogos].map((logo, i) => (
@@ -58,7 +71,7 @@ const HeroSection = () => {
           <div className="absolute right-0 top-0 h-full w-24 sm:w-32 bg-linear-to-l from-putih to-transparent pointer-events-none"></div>
         </div>
 
-        {/* Logo EO */}
+        {/*  Logo EO  */}
         <div className="relative overflow-hidden">
           <div className="flex items-center gap-10 sm:gap-12 whitespace-nowrap animate-scroll-right">
             {[...eoLogos, ...eoLogos].map((logo, i) => (

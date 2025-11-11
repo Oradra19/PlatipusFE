@@ -21,7 +21,7 @@ const Navbar = () => {
 
         {/* Navigation(Desktop) */}
         <nav className="hidden md:flex items-center gap-10 text-sm text-putih">
-          <a href="#home" className="hover:text-emas transition">
+          <a href="#beranda" className="hover:text-emas transition">
             Beranda
           </a>
           <a href="#sponsor" className="hover:text-emas transition">
