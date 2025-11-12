@@ -26,7 +26,7 @@ const testimonials = [
 
 const Testimoni = () => {
   return (
-    <section className="py-24 bg-putih text-center overflow-hidden">
+    <section id="testimoni" className="py-24 bg-putih text-center overflow-hidden">
       <div className="max-w-4xl mx-auto px-6 mb-12">
         <h2 className="text-2xl md:text-3xl font-bold text-biru-tua mb-2">
           Mereka yang tau Platipus

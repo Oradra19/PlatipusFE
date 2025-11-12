@@ -5,6 +5,8 @@ import SponsorPreview from "./components/SponsorPreview";
 import Kolaborasi from "./components/Kolaborasi";
 import Paket from "./components/Paket";
 import Testimoni from "./components/Testimoni";
+import AboutSection from "./components/AboutSection";
+import Footer from "../../components/common/footer";
 
 const LandingPage = () => {
 
@@ -17,6 +19,8 @@ const LandingPage = () => {
       <Kolaborasi />
       <Paket />
       <Testimoni />
+      <AboutSection />
+      <Footer />
     </>
   );
 };

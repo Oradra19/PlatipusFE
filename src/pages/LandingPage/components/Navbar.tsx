@@ -30,10 +30,10 @@ const Navbar = () => {
           <a href="#paket" className="hover:text-emas transition">
             Paket
           </a>
-          <a href="#ulasan" className="hover:text-emas transition">
+          <a href="#testimoni" className="hover:text-emas transition">
             Ulasan
           </a>
-          <a href="#tentang" className="hover:text-emas transition">
+          <a href="#about" className="hover:text-emas transition">
             Tentang Kami
           </a>
         </nav>
@@ -87,14 +87,14 @@ const Navbar = () => {
             Paket
           </a>
           <a
-            href="#ulasan"
+            href="#testimoni"
             className="block hover:text-emas transition"
             onClick={() => setMenuOpen(false)}
           >
             Ulasan
           </a>
           <a
-            href="#tentang"
+            href="#about"
             className="block hover:text-emas transition"
             onClick={() => setMenuOpen(false)}
           >
