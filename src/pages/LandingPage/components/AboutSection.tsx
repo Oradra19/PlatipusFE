@@ -4,7 +4,7 @@ const AboutSection = () => {
   return (
     <section id="about" className="bg-[#F4EEEE] py-20 md:py-28 px-6 sm:px-10 overflow-hidden">
       <div
-        className="max-w-6xl mx-auto bg-[#BFC8E2] rounded-[2rem] md:rounded-[3rem] shadow-lg 
+        className="max-w-6xl mx-auto bg-[#BFC8E2] rounded-4xl md:rounded-[3rem] shadow-lg 
                    flex flex-col md:flex-row items-center justify-between gap-10 md:gap-14 
                    p-8 md:p-12 relative overflow-hidden"
         style={{
@@ -13,7 +13,7 @@ const AboutSection = () => {
       >
         {/* === Gambar kiri === */}
         <div
-          className="flex-1 relative overflow-hidden rounded-2xl md:rounded-[2rem] shadow-md z-10"
+          className="flex-1 relative overflow-hidden rounded-2xl md:rounded-4xl shadow-md z-10"
           style={{
             transform: "skewY(2deg)",
           }}
@@ -41,18 +41,11 @@ const AboutSection = () => {
             Kami hadir untuk mempermudah proses pencarian, pengajuan, dan kerja
             sama sponsorship secara efisien dan transparan.
           </p>
-          <button
-            className="bg-biru-tua text-white px-6 sm:px-8 py-2.5 sm:py-3 rounded-xl 
-                       text-sm sm:text-base font-medium hover:bg-biru-tua/90 
-                       transition duration-300 w-fit"
-          >
-            Lebih tau tentang kami
-          </button>
         </div>
 
         {/* === Background biru besar === */}
         <div
-        className="absolute inset-y-0 right-0 bg-[#BFC8E2] rounded-[2rem] md:rounded-[3rem] z-0"
+        className="absolute inset-y-0 right-0 bg-[#BFC8E2] rounded-4xl md:rounded-[3rem] z-0"
         style={{
             transform: "skewY(-2deg)",
             width: "70%",   // 🟦 cuma 70% area kanan yang biru
