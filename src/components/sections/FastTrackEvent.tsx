@@ -3,9 +3,9 @@ import EventCard from "../card/EventCard";
 import type { EventData } from "../../services/mockEvent";
 
 const FastTrackEvent: FC<{ items: EventData[] }> = ({ items }) => (
-  <section className="bg-[#D5A93C1A] p-6 rounded-lg mb-10">
+  <section className="bg-emas/70 p-6 rounded-lg mb-10">
     <div className="max-w-7xl mx-auto">
-      <div className="inline-block bg-[#D5A93C] text-white px-3 py-1 rounded-t-md font-semibold mb-4">
+      <div className="inline-block text-putih font-bold px-3 py-1 rounded-t-md font-semibold mb-4">
         FAST TRACK EVENT
       </div>
 

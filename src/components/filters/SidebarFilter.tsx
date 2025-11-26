@@ -1,4 +1,5 @@
-import { FC, useState, ReactNode } from "react";
+import { useState } from "react";
+import type { FC, ReactNode} from "react";
 
 const SidebarFilter: FC = () => {
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
