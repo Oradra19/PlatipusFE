@@ -8,7 +8,8 @@ export interface EventData {
   logo: string;
   isFastTrack?: boolean;
   eoName: string;   
-  eoPhoto: string;   
+  eoPhoto: string;  
+  eoEmail: string; 
   category: string;  
   description: string;
   image: string;       
@@ -28,6 +29,7 @@ export const mockEvent: EventData[] = [
     eoName: "PT Event Nusantara",
     eoPhoto: "/eo1.png",
     category: "Teknologi",
+    eoEmail: "eventnusantara",
 
     image: "event1.png",
     description:
@@ -47,6 +49,7 @@ export const mockEvent: EventData[] = [
     eoName: "PT Event Nusantara",
     eoPhoto: "/eo1.png",
     category: "Teknologi",
+    eoEmail: "eventnusantara",
 
     image: "/event2.png",
     description:
@@ -66,6 +69,7 @@ export const mockEvent: EventData[] = [
     eoName: "PT Founder Indonesia",
     eoPhoto: "/eo2.png",
     category: "Startup",
+    eoEmail: "founder",
 
     image: "/event3.png",
     description: "Event networking besar untuk para founder startup di Indonesia."
@@ -84,6 +88,7 @@ export const mockEvent: EventData[] = [
     eoName: "PT Kreativa Nusantara",
     eoPhoto: "/eo3.png",
     category: "Kreativitas",
+    eoEmail: "kreativa",
 
     image: "/event4.png",
     description: "Pekan kreativitas nasional dengan berbagai kompetisi seni dan kreasi."
@@ -102,6 +107,7 @@ export const mockEvent: EventData[] = [
     eoName: "PT Digital Academy",
     eoPhoto: "/eo4.png",
     category: "Teknologi",
+    eoEmail: "digital",
 
     image: "/event5.png",
     description: "Hackfest teknologi terbesar dengan ratusan peserta developer."
@@ -123,6 +129,7 @@ export const mockProposal: EventData[] = [
     eoName: "PT Creator Indonesia",
     eoPhoto: "/eo5.png",
     category: "Kreator & Komunitas",
+    eoEmail: "creator",
 
     // DETAIL PAGE
     image: "/event-prop1.png",
@@ -142,6 +149,7 @@ export const mockProposal: EventData[] = [
     eoName: "PT Kampus Hebat",
     eoPhoto: "/eo6.png",
     category: "Pendidikan",
+    eoEmail: "kampus",
 
     image: "/event-prop2.png",
     description:
@@ -160,6 +168,7 @@ export const mockProposal: EventData[] = [
     eoName: "PT DevHUB Indonesia",
     eoPhoto: "/eo7.png",
     category: "Teknologi",
+    eoEmail: "devhub",
 
     image: "/event-prop3.png",
     description:
@@ -178,6 +187,7 @@ export const mockProposal: EventData[] = [
     eoName: "PT Startup Mandiri",
     eoPhoto: "/eo8.png",
     category: "Startup & Bisnis",
+    eoEmail: "startup",
 
     image: "/event-prop4.png",
     description:
@@ -196,6 +206,7 @@ export const mockProposal: EventData[] = [
     eoName: "PT DesignHub",
     eoPhoto: "/eo9.png",
     category: "Desain & Kreatif",
+    eoEmail: "designhub",
 
     image: "/event-prop5.png",
     description:

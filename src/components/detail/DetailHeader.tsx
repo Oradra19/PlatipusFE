@@ -1,14 +1,15 @@
 import type { FC } from "react";
 import type { EventData } from "../../services/mockEvent";
+import { useState } from "react";
+import ConfirmModal from "./ConfirmModal";
 import { FaCalendar, FaMapMarkerAlt } from "react-icons/fa";
 
 const DetailHeader: FC<{ event: EventData }> = ({ event }) => {
+  const [openModal, setOpenModal] = useState(false);
   return (
     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
-
       {/* LEFT — EO INFO */}
       <div className="flex items-start gap-4">
-
         {/* FOTO EO */}
         <div className="w-14 h-14 rounded-xl border-2 border-emas p-1">
           <img
@@ -26,12 +27,14 @@ const DetailHeader: FC<{ event: EventData }> = ({ event }) => {
 
           {/* KATEGORI */}
           <p className="text-xs text-gray-600 mb-1">
-            Kategori : <span className="font-medium text-biru-tua">{event.category || "Event"}</span>
+            Kategori :{" "}
+            <span className="font-medium text-biru-tua">
+              {event.category || "Event"}
+            </span>
           </p>
 
           {/* LOKASI + TANGGAL */}
           <div className="flex flex-wrap text-xs text-gray-600 gap-4 mt-1">
-
             <span className="flex items-center gap-1">
               <FaMapMarkerAlt size={12} /> {event.location}
             </span>
@@ -45,11 +48,18 @@ const DetailHeader: FC<{ event: EventData }> = ({ event }) => {
 
       {/* RIGHT — BUTTON + STATUS */}
       <div className="flex flex-col sm:flex-row items-end sm:items-center gap-3">
-
-        {/* BUTTON KONFIRMASI */}
-        <button className="bg-emas text-white px-4 py-2 text-xs rounded-md hover:bg-yellow-600 transition">
+        <button
+          onClick={() => setOpenModal(true)}
+          className="px-4 py-2 rounded-lg bg-emas text-white hover:bg-yellow-600"
+        >
           Konfirmasi Proposal
         </button>
+
+        <ConfirmModal
+          open={openModal}
+          onClose={() => setOpenModal(false)}
+          event={event}
+        />
 
         {/* STATUS */}
         <span className="bg-green-500/90 text-white px-4 py-2 text-xs rounded-md font-medium">
