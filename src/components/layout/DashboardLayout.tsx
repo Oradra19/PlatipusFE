@@ -27,7 +27,7 @@ const DashboardLayout: FC<DashboardLayoutProps> = ({
       <DashboardHero username={username} />
 
       {/* BAGIAN LENGKUNG (Rounded top: 60px) */}
-      <div className="w-full bg-biru-tua rounded-t-[60px] mt-[-40px] pt-10 pb-16">
+      <div className="w-full bg-biru-tua rounded-t-[60px] -mt-10 pt-10 pb-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-8">
           {/* TABS DI SINI */}
           {activeTab && onTabChange && (

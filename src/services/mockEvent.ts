@@ -4,9 +4,14 @@ export interface EventData {
   location: string;
   date: string;
   audience: string;
-  logo: string;
   tags: string[];
+  logo: string;
   isFastTrack?: boolean;
+  eoName: string;   
+  eoPhoto: string;   
+  category: string;  
+  description: string;
+  image: string;       
 }
 
 export const mockEvent: EventData[] = [
@@ -19,7 +24,16 @@ export const mockEvent: EventData[] = [
     logo: "/logo1.png",
     tags: [">10 Juta", "Dana", "Besar", "Offline"],
     isFastTrack: true,
+
+    eoName: "PT Event Nusantara",
+    eoPhoto: "/eo1.png",
+    category: "Teknologi",
+
+    image: "event1.png",
+    description:
+      "Innovation Summit Asia 2024 adalah acara tahunan yang mempertemukan para inovator, pengusaha, dan pemimpin industri dari seluruh Asia untuk berbagi ide dan teknologi terbaru."
   },
+
   {
     id: "FT2",
     title: "Future Tech Expo 2024",
@@ -29,7 +43,16 @@ export const mockEvent: EventData[] = [
     logo: "/logo2.png",
     tags: ["5–10 Juta", "Produk", "Sedang", "Offline"],
     isFastTrack: true,
+
+    eoName: "PT Event Nusantara",
+    eoPhoto: "/eo1.png",
+    category: "Teknologi",
+
+    image: "/event2.png",
+    description:
+      "Future Tech Expo 2024 menampilkan teknologi terbaru dalam bidang AI, robotik, dan inovasi digital."
   },
+
   {
     id: "FT3",
     title: "Startup Founder Day",
@@ -39,7 +62,15 @@ export const mockEvent: EventData[] = [
     logo: "/logo3.png",
     tags: ["3–6 Juta", "Dana", "Sedang", "Online"],
     isFastTrack: true,
+
+    eoName: "PT Founder Indonesia",
+    eoPhoto: "/eo2.png",
+    category: "Startup",
+
+    image: "/event3.png",
+    description: "Event networking besar untuk para founder startup di Indonesia."
   },
+
   {
     id: "FT4",
     title: "National Creativity Week",
@@ -49,7 +80,15 @@ export const mockEvent: EventData[] = [
     logo: "/logo4.png",
     tags: ["2–3 Juta", "Dana", "Kecil", "Offline"],
     isFastTrack: true,
+
+    eoName: "PT Kreativa Nusantara",
+    eoPhoto: "/eo3.png",
+    category: "Kreativitas",
+
+    image: "/event4.png",
+    description: "Pekan kreativitas nasional dengan berbagai kompetisi seni dan kreasi."
   },
+
   {
     id: "FT5",
     title: "Digital Innovation Hackfest",
@@ -58,142 +97,14 @@ export const mockEvent: EventData[] = [
     audience: "Developer",
     logo: "/logo5.png",
     tags: ["5–10 Juta", "Produk", "Sedang", "Offline"],
-    isFastTrack: true,
-  },
-  {
-    id: "EV6",
-    title: "Tech Expo 2024",
-    location: "Jakarta",
-    date: "20–21 Mei 2024",
-    audience: "Profesional",
-    logo: "/logo2.png",
-    tags: ["5–10 Juta", "Dana", "Sedang", "Online"],
-  },
-  {
-    id: "EV7",
-    title: "Startup Pitch Day",
-    location: "Bandung",
-    date: "10–11 Juni 2024",
-    audience: "Komunitas",
-    logo: "/logo3.png",
-    tags: ["1–2 Juta", "Produk", "Kecil", "Offline"],
-  },
-  {
-    id: "EV8",
-    title: "Solo Event Global Tech",
-    location: "Surakarta",
-    date: "13–15 Agustus 2024",
-    audience: "Mahasiswa",
-    logo: "/logo1.png",
-    tags: ["2–3 Juta", "Dana", "Besar", "Offline"],
-  },
-  {
-    id: "EV9",
-    title: "Digital Startup Conference",
-    location: "Jakarta",
-    date: "23–25 Juli 2024",
-    audience: "Founder",
-    logo: "/logo4.png",
-    tags: [">10 Juta", "Produk", "Besar", "Offline"],
-  },
-  {
-    id: "EV10",
-    title: "Youth Creative Festival",
-    location: "Solo",
-    date: "30–31 Juli 2024",
-    audience: "Pelajar",
-    logo: "/logo6.png",
-    tags: ["1–2 Juta", "Dana", "Kecil", "Offline"],
-  },
-  {
-    id: "EV11",
-    title: "EduTech Summit",
-    location: "Surabaya",
-    date: "8–9 Agustus 2024",
-    audience: "Guru",
-    logo: "/logo7.png",
-    tags: ["3–5 Juta", "Produk", "Sedang", "Online"],
-  },
-  {
-    id: "EV12",
-    title: "Gaming Creator MeetUp",
-    location: "Jakarta",
-    date: "15–17 September 2024",
-    audience: "Gamer",
-    logo: "/logo8.png",
-    tags: ["1–2 Juta", "Produk", "Kecil", "Offline"],
-  },
-  {
-    id: "EV13",
-    title: "Business Leadership Forum",
-    location: "Medan",
-    date: "28–30 September 2024",
-    audience: "CEO",
-    logo: "/logo9.png",
-    tags: [">10 Juta", "Dana", "Besar", "Offline"],
-  },
-  {
-    id: "EV14",
-    title: "Music & Festival Expo",
-    location: "Bali",
-    date: "5–7 Oktober 2024",
-    audience: "Umum",
-    logo: "/logo10.png",
-    tags: ["3–5 Juta", "Dana", "Sedang", "Offline"],
-  },
-  {
-    id: "EV15",
-    title: "AI & Robotics Week",
-    location: "Jakarta",
-    date: "10–12 Oktober 2024",
-    audience: "Engineer",
-    logo: "/logo11.png",
-    tags: [">10 Juta", "Produk", "Besar", "Offline"],
-  },
-  {
-    id: "EV16",
-    title: "Indie Developer Showcase",
-    location: "Malang",
-    date: "18–19 Oktober 2024",
-    audience: "Indie Dev",
-    logo: "/logo12.png",
-    tags: ["1–2 Juta", "Dana", "Kecil", "Online"],
-  },
-  {
-    id: "EV17",
-    title: "Cybersecurity Awareness Day",
-    location: "Jakarta",
-    date: "2–3 November 2024",
-    audience: "IT Officer",
-    logo: "/logo13.png",
-    tags: ["3–6 Juta", "Produk", "Sedang", "Offline"],
-  },
-  {
-    id: "EV18",
-    title: "Creative Art Expo",
-    location: "Bandung",
-    date: "12–14 November 2024",
-    audience: "Seni",
-    logo: "/logo14.png",
-    tags: ["1–2 Juta", "Dana", "Kecil", "Offline"],
-  },
-  {
-    id: "EV19",
-    title: "National Media Summit",
-    location: "Jakarta",
-    date: "20–22 November 2024",
-    audience: "Media",
-    logo: "/logo15.png",
-    tags: ["3–5 Juta", "Produk", "Sedang", "Online"],
-  },
-  {
-    id: "EV20",
-    title: "Social Impact Conference",
-    location: "Semarang",
-    date: "1–3 Desember 2024",
-    audience: "Komunitas",
-    logo: "/logo16.png",
-    tags: ["1–2 Juta", "Dana", "Kecil", "Offline"],
+    isFastTrack: false,
+
+    eoName: "PT Digital Academy",
+    eoPhoto: "/eo4.png",
+    category: "Teknologi",
+
+    image: "/event5.png",
+    description: "Hackfest teknologi terbesar dengan ratusan peserta developer."
   },
 ];
 export const mockProposal: EventData[] = [
@@ -205,8 +116,20 @@ export const mockProposal: EventData[] = [
     audience: "Umum",
     logo: "/logo3.png",
     tags: ["1–2 Juta", "Dana", "Kecil", "Offline"],
-    isFastTrack: true, // MINIMAL 1 FASTTRACK
+
+    isFastTrack: true,
+
+    // INFO EO
+    eoName: "PT Creator Indonesia",
+    eoPhoto: "/eo5.png",
+    category: "Kreator & Komunitas",
+
+    // DETAIL PAGE
+    image: "/event-prop1.png",
+    description:
+      "Creator Mini Expo adalah ajang pertemuan komunitas kreator untuk menampilkan karya, bertukar ide, serta menjalin kolaborasi dengan berbagai brand dan sponsor. Acara ini menghadirkan booth mini, sesi sharing, dan kompetisi kreatif."
   },
+
   {
     id: "P2",
     title: "Campus Innovation Day",
@@ -215,7 +138,16 @@ export const mockProposal: EventData[] = [
     audience: "Mahasiswa",
     logo: "/logo4.png",
     tags: ["2–3 Juta", "Produk", "Kecil", "Online"],
+
+    eoName: "PT Kampus Hebat",
+    eoPhoto: "/eo6.png",
+    category: "Pendidikan",
+
+    image: "/event-prop2.png",
+    description:
+      "Campus Innovation Day menghadirkan mahasiswa inovatif dari berbagai kampus untuk mempresentasikan karya riset dan teknologi. Acara ini juga menyediakan sesi mentoring dan virtual expo."
   },
+
   {
     id: "P3",
     title: "Youth Developer Gathering",
@@ -224,7 +156,16 @@ export const mockProposal: EventData[] = [
     audience: "Developer",
     logo: "/logo5.png",
     tags: ["3–6 Juta", "Dana", "Sedang", "Offline"],
+
+    eoName: "PT DevHUB Indonesia",
+    eoPhoto: "/eo7.png",
+    category: "Teknologi",
+
+    image: "/event-prop3.png",
+    description:
+      "Youth Developer Gathering mempertemukan developer muda Indonesia dalam satu forum besar. Acara mencakup workshop, sesi live coding, dan kompetisi pemrograman."
   },
+
   {
     id: "P4",
     title: "National StartUp Meetup",
@@ -233,7 +174,16 @@ export const mockProposal: EventData[] = [
     audience: "Startup",
     logo: "/logo6.png",
     tags: ["1–2 Juta", "Dana", "Kecil", "Offline"],
+
+    eoName: "PT Startup Mandiri",
+    eoPhoto: "/eo8.png",
+    category: "Startup & Bisnis",
+
+    image: "/event-prop4.png",
+    description:
+      "National StartUp Meetup adalah forum interaktif bagi startup pemula untuk mempresentasikan ide mereka kepada komunitas dan sponsor potensial. Termasuk sesi pitching dan networking."
   },
+
   {
     id: "P5",
     title: "Design & Creator Fest",
@@ -242,5 +192,13 @@ export const mockProposal: EventData[] = [
     audience: "Content Creator",
     logo: "/logo7.png",
     tags: ["1–2 Juta", "Produk", "Kecil", "Online"],
-  },
+
+    eoName: "PT DesignHub",
+    eoPhoto: "/eo9.png",
+    category: "Desain & Kreatif",
+
+    image: "/event-prop5.png",
+    description:
+      "Design & Creator Fest menggabungkan berbagai komunitas kreatif mulai dari desain grafis, UI/UX, video creator hingga fotografi dalam satu festival besar dengan workshop intensif dan kompetisi."
+  }
 ];

@@ -1,7 +1,10 @@
 import type { FC } from "react";
 import type { EventData } from "../../services/mockEvent";
+import { useNavigate } from "react-router-dom";
 
 const EventCard: FC<{ data: EventData }> = ({ data }) => {
+  const navigate = useNavigate();
+
   return (
     <div className="bg-white text-black p-6 rounded-[22px] shadow-md hover:shadow-lg transition w-full max-w-full">
 
@@ -27,13 +30,10 @@ const EventCard: FC<{ data: EventData }> = ({ data }) => {
         {data.title}
       </h3>
 
-      {/* ============================= */}
-      {/*   GRID BARU — 4 ROW VERSION   */}
-      {/* ============================= */}
-
+      {/* GRID ROWS */}
       <div className="flex flex-col gap-6">
 
-        {/* === ROW 1: Lokasi === */}
+        {/* Lokasi */}
         <div className="flex flex-col gap-2">
           <span className="text-sm font-semibold">Lokasi</span>
           <span className="px-3 py-1 bg-[#0F1F3D] text-white rounded-full text-xs w-fit whitespace-nowrap">
@@ -41,7 +41,7 @@ const EventCard: FC<{ data: EventData }> = ({ data }) => {
           </span>
         </div>
 
-        {/* === ROW 2: Acara Berlangsung === */}
+        {/* Acara berlangsung */}
         <div className="flex flex-col gap-2">
           <span className="text-sm font-semibold">Acara Berlangsung</span>
           <span className="px-3 py-1 bg-[#0F1F3D] text-white rounded-full text-xs w-fit whitespace-nowrap">
@@ -49,34 +49,29 @@ const EventCard: FC<{ data: EventData }> = ({ data }) => {
           </span>
         </div>
 
-        {/* === ROW 3: Target - Kebutuhan - Ukuran === */}
+        {/* Audience — Kebutuhan — Ukuran */}
         <div className="flex flex-col gap-2">
           <span className="text-sm font-semibold">Detail Event</span>
-
           <div className="flex flex-wrap gap-2">
             <span className="px-3 py-1 bg-yellow-400 text-black rounded-full text-xs whitespace-nowrap">
               {data.audience}
             </span>
-
             <span className="px-3 py-1 bg-green-600 text-white rounded-full text-xs whitespace-nowrap">
               {data.tags[0]}
             </span>
-
             <span className="px-3 py-1 bg-purple-600 text-white rounded-full text-xs whitespace-nowrap">
               {data.tags[2]}
             </span>
           </div>
         </div>
 
-        {/* === ROW 4: Mode - Jenis Sponsor === */}
+        {/* Informasi tambahan */}
         <div className="flex flex-col gap-2">
           <span className="text-sm font-semibold">Informasi Tambahan</span>
-
           <div className="flex flex-wrap gap-2">
             <span className="px-3 py-1 bg-red-500 text-white rounded-full text-xs whitespace-nowrap">
               {data.tags[3]}
             </span>
-
             <span className="px-3 py-1 bg-[#0F1F3D] text-white rounded-full text-xs whitespace-nowrap">
               {data.tags[1]}
             </span>
@@ -85,8 +80,11 @@ const EventCard: FC<{ data: EventData }> = ({ data }) => {
 
       </div>
 
-      {/* BUTTON */}
-      <button className="mt-8 bg-biru-muda/90 text-white px-4 py-3 rounded-xl w-full font-semibold hover:bg-blue-700 transition">
+      {/* BUTTON → navigate ke detail */}
+      <button
+        onClick={() => navigate(`/dashboard/sponsor/event/${data.id}`)}
+        className="mt-8 bg-biru-muda/90 text-white px-4 py-3 rounded-xl w-full font-semibold hover:bg-blue-700 transition"
+      >
         Lihat Detail
       </button>
     </div>
