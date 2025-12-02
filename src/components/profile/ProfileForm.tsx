@@ -62,10 +62,10 @@ const TagInput: FC<{
 const ProfileForm: FC = () => {
   const [openStatus, setOpenStatus] = useState("tertutup");
   const [tags, setTags] = useState<string[]>([]);
+  localStorage.setItem("profile_complete", "true");
 
   return (
     <div className="bg-background text-biru-tua rounded-3xl p-10 shadow-lg">
-
       <h3 className="text-xl font-semibold mb-6">Personal Informasi</h3>
 
       {/* Open Sponsorship */}
@@ -95,7 +95,6 @@ const ProfileForm: FC = () => {
 
       {/* FORM GRID */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-
         {/* Nama sponsor */}
         <div>
           <label className="text-sm text-gray-600">Nama sponsor</label>
@@ -129,17 +128,18 @@ const ProfileForm: FC = () => {
 
       {/* Dropdown row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-
         <div>
-          <label className="text-sm text-gray-600">Pilih kategori sponsor</label>
+          <label className="text-sm text-gray-600">
+            Pilih kategori sponsor
+          </label>
           <select className="w-full mt-1 py-3 px-4 rounded-xl bg-putih outline-none">
             <option>Pilih Kategori</option>
           </select>
         </div>
 
         <div>
-            <label className="text-sm text-gray-600">Tipe sponsor</label>
-            <TagInput tags={tags} setTags={setTags} />
+          <label className="text-sm text-gray-600">Tipe sponsor</label>
+          <TagInput tags={tags} setTags={setTags} />
         </div>
 
         <div>
@@ -155,7 +155,6 @@ const ProfileForm: FC = () => {
             <option>Pilih Range Sponsorship</option>
           </select>
         </div>
-
       </div>
 
       {/* BUTTON ACTIONS */}
@@ -164,7 +163,13 @@ const ProfileForm: FC = () => {
           Batalkan perubahan
         </button>
 
-        <button className="w-full sm:w-1/2 py-3 bg-biru-muda text-white rounded-xl font-semibold hover:bg-blue-700 transition">
+        <button
+          onClick={() => {
+            localStorage.setItem("profile_complete", "true");
+            alert("Profil berhasil disimpan!");
+          }}
+          className="w-full sm:w-1/2 py-3 bg-biru-muda text-white rounded-xl"
+        >
           Simpan perubahan
         </button>
       </div>

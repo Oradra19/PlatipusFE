@@ -1,4 +1,4 @@
-import { FC } from "react";
+import type { FC } from "react";
 import { FaFilePdf } from "react-icons/fa";
 import type { EventData } from "../../services/mockEvent";
 
