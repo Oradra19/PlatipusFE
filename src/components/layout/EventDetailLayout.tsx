@@ -11,7 +11,7 @@ const EventDetailLayout: FC<Props> = ({ username, children }) => {
   return (
     <div id="page-top" className="min-h-screen bg-putih flex flex-col">
       {/* NAVBAR */}
-      <NavbarDashboard username={username} />
+      <NavbarDashboard username={username} role="sponsor" />
 
       {/* MAIN CONTENT (harus flex-1 supaya footer nempel) */}
       <main className="flex-1 w-full">

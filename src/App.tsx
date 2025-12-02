@@ -4,6 +4,7 @@ import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 import SponsorDashboardPage from "./pages/Sponsor/SponsorDashboard";
 import EventDetail from "./pages/Sponsor/EventDetail";
+import SponsorProfile from "./pages/Sponsor/SponsorProfile";
 
 const App = () => {
   return (
@@ -17,7 +18,7 @@ const App = () => {
       {/* DASHBOARD */}
       <Route path="/dashboard/sponsor" element={<SponsorDashboardPage />} />
       <Route path="/dashboard/sponsor/event/:id" element={<EventDetail />} />
-      
+      <Route path="/profile/sponsor" element={<SponsorProfile />} />
     </Routes>
   );
 };

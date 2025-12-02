@@ -23,7 +23,7 @@ const DashboardLayout: FC<DashboardLayoutProps> = ({
   return (
     <div className="min-h-screen bg-biru-tua text-white">
       {/* NAV + HERO */}
-      <NavbarDashboard username={username} />
+      <NavbarDashboard username={username} role="sponsor" />
       <DashboardHero username={username} />
 
       {/* BAGIAN LENGKUNG (Rounded top: 60px) */}

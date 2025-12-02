@@ -67,7 +67,7 @@ const Footer = () => {
           </div>
           {/* Location */}
           <div className="text-left w-full md:w-auto">
-            <h4 className="font-semibold text-white mb-1">Location</h4>
+            <h4 className="font-semibold text-white mb-1">Lokasi</h4>
             <p className="text-white/70">Surakarta, Indonesia</p>
           </div>
         </div>

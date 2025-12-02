@@ -4,10 +4,16 @@ import logo from "../../assets/logo.png";
 
 interface NavbarProps {
   username: string;
+  role: "sponsor" | "eo"; // bisa ditambah nanti
 }
 
-const NavbarDashboard: FC<NavbarProps> = ({ username }) => {
+const NavbarDashboard: FC<NavbarProps> = ({ username, role }) => {
   const navigate = useNavigate();
+
+  const goToProfile = () => {
+    if (role === "sponsor") navigate("/profile/sponsor");
+    else if (role === "eo") navigate("/profile/eo");
+  };
 
   return (
     <nav className="w-full bg-biru-tua text-white py-4 shadow px-4 sm:px-6 lg:px-10">
@@ -21,8 +27,9 @@ const NavbarDashboard: FC<NavbarProps> = ({ username }) => {
           <span className="text-sm text-abu-abu opacity-90 hidden sm:block">
             {username}
           </span>
+
           <button
-            onClick={() => navigate("/profile")}
+            onClick={goToProfile}
             className="bg-emas text-biru-tua font-medium px-5 py-2 rounded-md hover:bg-[#c89b33] transition text-sm"
           >
             Profile
