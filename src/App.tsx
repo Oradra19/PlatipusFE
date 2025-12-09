@@ -8,6 +8,7 @@ import SponsorProfile from "./pages/Sponsor/SponsorProfile";
 import EODashboard from "./pages/EO/EODashboard";
 import EOAddEvent from "./pages/EO/EOAddEvent"; 
 import EOEditEvent from "./pages/EO/EOEditEvent";
+import EOHomePage from "./pages/EO/EOHome";
 
 const App = () => {
   return (
@@ -27,6 +28,7 @@ const App = () => {
       <Route path="/dashboard/eo" element={<EODashboard />} />
       <Route path="/dashboard/eo/add" element={<EOAddEvent />} />
       <Route path="/dashboard/eo/edit/:id" element={<EOEditEvent />} />
+      <Route path="/dashboard/eo/home" element={<EOHomePage />} />
 
     </Routes>
   );
