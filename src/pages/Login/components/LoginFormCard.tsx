@@ -16,7 +16,7 @@ const LoginFormCard = () => {
     const lowered = email.toLowerCase();
 
     if (lowered.includes("eo")) {
-      navigate("/dashboard/eo");
+      navigate("/dashboard/eo/home");
     } else if (lowered.includes("sponsor")) {
       navigate("/dashboard/sponsor");
     } else {

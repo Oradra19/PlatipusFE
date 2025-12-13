@@ -11,10 +11,10 @@ const NavbarDashboard: FC<NavbarProps> = ({ username, role }) => {
   const navigate = useNavigate();
 
   const handleButtonClick = () => {
-    if (role === "sponsor") {
+    if (role === "eo") {
       // Logic lama untuk sponsor
-      navigate("/profile/sponsor");
-    } else if (role === "eo") {
+      navigate("/dashboard/eo");
+    } else if (role === "sponsor") {
       // Logic baru untuk EO: Kembali ke Landing Page
       navigate("/"); 
     }
@@ -24,12 +24,11 @@ const NavbarDashboard: FC<NavbarProps> = ({ username, role }) => {
   // Logic Styling & Text berdasarkan Role
   const isEO = role === "eo";
 
-  const buttonText = isEO ? "Kembali" : "Profile";
+  const buttonText = isEO ? "Dashboard" : "Dashboard";
   
-
   // Teks sapaan
   const displayText = isEO 
-    ? `Selamat Datang ${username}!` 
+    ? `Selamat Datang EO, ${username}!` 
     : username;
 
   return (
@@ -51,7 +50,7 @@ const NavbarDashboard: FC<NavbarProps> = ({ username, role }) => {
           <button
             onClick={handleButtonClick}
             className="bg-emas text-biru-tua font-medium px-5 py-2 rounded-md hover:bg-[#c89b33] transition text-sm"
-            >
+          >
             {buttonText}
           </button>
         </div>

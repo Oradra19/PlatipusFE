@@ -1,6 +1,6 @@
 import type { FC } from "react";
 import { useState, useEffect } from "react";
-import DashboardLayout from "../../components/layout/DashboardLayout";
+import DashboardLayout from "../../components/layout/DashboardEOLayout";
 import EOHomeContent from "./EOHomeContent";
 import PopupLogin from "../../components/popup/PopupLogin";
 

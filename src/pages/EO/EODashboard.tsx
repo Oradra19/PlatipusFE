@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import NavbarDashboard from "../../components/common/NavbarDashboard";
+import NavbarDashboard from "../../components/common/NavbarDashboardEO";
 import Footer from "../../components/common/Footer";
 import EOProfileCard from "./components/EOProfileCard";
 import ProposalTable from "./components/ProposalTable";
