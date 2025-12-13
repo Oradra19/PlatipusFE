@@ -2,34 +2,36 @@ import type { FC } from "react";
 import { useNavigate } from "react-router-dom";
 import logo from "../../assets/logo.png";
 
-interface NavbarProps {
-  username: string;
-  role: "sponsor" | "eo";
+interface User {
+  name: string;
+  role: "EO" | "SPONSOR";
 }
 
-const NavbarDashboard: FC<NavbarProps> = ({ username, role }) => {
+const NavbarDashboard: FC = () => {
   const navigate = useNavigate();
 
+  // 🔐 Ambil user dari localStorage
+  const userString = localStorage.getItem("user");
+  const user: User | null = userString ? JSON.parse(userString) : null;
+
+  const username = user?.name || "User";
+  const role = user?.role;
+
   const handleButtonClick = () => {
-    if (role === "eo") {
-      // Logic lama untuk sponsor
-      navigate("/dashboard/eo");
-    } else if (role === "sponsor") {
-      // Logic baru untuk EO: Kembali ke Landing Page
-      navigate("/"); 
+    if (role === "EO") {
+      navigate("/dashboard/eo/");
+    } else if (role === "SPONSOR") {
+      navigate("/dashboard/sponsor");
+    } else {
+      navigate("/");
     }
-    
   };
 
-  // Logic Styling & Text berdasarkan Role
-  const isEO = role === "eo";
+  const isEO = role === "EO";
 
-  const buttonText = isEO ? "Dashboard" : "Dashboard";
-  
-  // Teks sapaan
-  const displayText = isEO 
-    ? `Selamat Datang EO, ${username}!` 
-    : username;
+  const displayText = isEO
+    ? `Selamat Datang ${username}!`
+    : `Halo ${username}`;
 
   return (
     <nav className="w-full bg-biru-tua text-white py-4 shadow px-4 sm:px-6 lg:px-10">
@@ -51,7 +53,7 @@ const NavbarDashboard: FC<NavbarProps> = ({ username, role }) => {
             onClick={handleButtonClick}
             className="bg-emas text-biru-tua font-medium px-5 py-2 rounded-md hover:bg-[#c89b33] transition text-sm"
           >
-            {buttonText}
+            Dashboard
           </button>
         </div>
       </div>

@@ -2,25 +2,53 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import google from "../../../assets/google.png";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import apiClient from "../../../services/axiosInstance"; // ⬅️ SESUAIKAN PATH
 
 const LoginFormCard = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
 
-  // ✨ TAMBAHAN STATE BUAT AMBIL INPUT LOGIN
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  // ✨ LOGIC LOGIN SEMENTARA
-  const handleLogin = () => {
-    const lowered = email.toLowerCase();
+  const handleLogin = async () => {
+    if (!email || !password) {
+      alert("Email dan password wajib diisi");
+      return;
+    }
 
-    if (lowered.includes("eo")) {
-      navigate("/dashboard/eo/home");
-    } else if (lowered.includes("sponsor")) {
-      navigate("/dashboard/sponsor");
-    } else {
-      alert("Email harus mengandung eo atau sponsor untuk testing login!");
+    try {
+      setLoading(true);
+
+      const res = await apiClient.post("/auth/login", {
+        email,
+        password,
+      });
+
+      const { token, user } = res.data;
+
+      // 🔐 simpan token & user
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
+
+      // 🚀 redirect berdasarkan role
+      if (user.role === "EO") {
+        navigate("/dashboard/eo/home");
+      } else if (user.role === "SPONSOR") {
+        navigate("/dashboard/sponsor");
+      } else {
+        alert("Role tidak dikenali");
+      }
+    } catch (err: any) {
+      const message =
+        err.response?.data?.message ||
+        err.message ||
+        "Terjadi kesalahan saat login";
+
+      alert(message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -35,7 +63,6 @@ const LoginFormCard = () => {
       </p>
 
       <form className="w-full space-y-5" onSubmit={(e) => e.preventDefault()}>
-
         {/* EMAIL */}
         <input
           type="email"
@@ -56,7 +83,7 @@ const LoginFormCard = () => {
           />
           <span
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-3 top-3 cursor-pointer text-gray-500 hover:text-[#0C1626] transition"
+            className="absolute right-3 top-3 cursor-pointer text-gray-500 hover:text-[#0C1626]"
           >
             {showPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
           </span>
@@ -70,9 +97,10 @@ const LoginFormCard = () => {
         <button
           type="button"
           onClick={handleLogin}
-          className="w-full bg-[#0C1626] text-white py-3 rounded-lg font-semibold hover:bg-[#18263C] transition"
+          disabled={loading}
+          className="w-full bg-[#0C1626] text-white py-3 rounded-lg font-semibold hover:bg-[#18263C] transition disabled:opacity-60"
         >
-          Masuk
+          {loading ? "Memproses..." : "Masuk"}
         </button>
 
         <div className="flex items-center my-4">
@@ -91,18 +119,6 @@ const LoginFormCard = () => {
             Daftar
           </button>
         </div>
-
-        <button
-          type="button"
-          className="w-full flex items-center justify-center border border-gray-300 rounded-lg py-3 hover:bg-gray-100 transition text-sm"
-        >
-          <img
-            src={google}
-            alt="Google"
-            className="w-8 h-8 mr-2 object-contain"
-          />
-          Lanjutkan dengan Google
-        </button>
       </form>
     </div>
   );
