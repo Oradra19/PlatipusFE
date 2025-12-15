@@ -1,18 +1,18 @@
 import type { FC } from "react";
+import { useState } from "react";
 import NavbarDashboard from "../../components/common/NavbarDashboardEO";
 import Footer from "../../components/common/Footer";
 import EOProfileCard from "./components/EOProfileCard";
-import ProposalTable from "./components/ProposalTable";
+import EventList from "../../components/sections/EventList";
 
 const EODashboard: FC = () => {
+  const [active, setActive] = useState<"all" | "applied">("all");
+
   return (
     <div className="min-h-screen bg-[#F5F5F5] flex flex-col font-sans">
-      
-      {/* ✅ Navbar sekarang ambil user langsung dari localStorage */}
-      <NavbarDashboard />
+      <NavbarDashboard activeTab={active} onTabChange={setActive} />
 
       <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 py-10">
-        
         <div className="mb-6">
           <h1 className="text-2xl font-bold text-biru-tua">
             Dashboard Event Organizer
@@ -23,7 +23,9 @@ const EODashboard: FC = () => {
         </div>
 
         <EOProfileCard />
-        <ProposalTable />
+
+        {/* 🔥 INI KUNCINYA */}
+        <EventList mode={active} />
       </main>
 
       <Footer />

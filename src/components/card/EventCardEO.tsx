@@ -1,85 +1,94 @@
 import type { FC } from "react";
-import type { SimpleEOCard } from "../../services/MockEventEO";
+import { useState } from "react";
+import type { EOProposalCard } from "../../types/EOProposalCard";
 import { useNavigate } from "react-router-dom";
+import AjukanModal from "./AjukanModal";
 
-const EventCard: FC<{ data: SimpleEOCard }> = ({ data }) => {
+export type CardMode = "browse" | "applied";
+
+const EventCardEO: FC<{ data: EOProposalCard; mode: CardMode }> = ({
+  data,
+  mode,
+}) => {
   const navigate = useNavigate();
+  const [openModal, setOpenModal] = useState(false);
 
   return (
-    <div className="bg-white text-black p-6 rounded-[22px] shadow-md hover:shadow-lg transition w-full max-w-full">
-
-      {/* TOP LABELS */}
-      <div className="flex items-center justify-between w-full mb-6 flex-wrap gap-3">
-        <span className="px-3 py-1 bg-gray-100 rounded-full text-xs font-medium whitespace-nowrap">
+    <div className="bg-white text-black p-6 rounded-[22px] shadow-md w-full">
+      {/* LABEL */}
+      <div className="flex justify-between mb-6">
+        <span className="px-3 py-1 bg-gray-100 rounded-full text-xs">
           {data.category}
         </span>
-        <span className="px-3 py-1 bg-yellow-400 rounded-full text-xs font-medium whitespace-nowrap">
+        <span className="px-3 py-1 bg-yellow-400 rounded-full text-xs">
           {data.status}
         </span>
       </div>
 
-      {/* LOGO */}
       <img
         src={data.logo}
         alt="logo"
         className="w-20 h-20 object-contain mb-4"
       />
 
-      {/* BRAND NAME */}
-      <h3 className="text-2xl font-bold mb-2 leading-tight">
-        {data.brandName}
-      </h3>
-
-      {/* COMPANY NAME */}
+      <h3 className="text-xl font-bold mb-1">{data.brandName}</h3>
       <p className="text-gray-700 font-semibold mb-4">
         {data.companyName}
       </p>
 
-      {/* DESCRIPTION */}
-      <p className="text-sm text-gray-600 leading-relaxed mb-6">
-        {data.description}
-      </p>
+      <p className="text-sm text-gray-600 mb-6">{data.description}</p>
 
-      {/* SPONSOR TYPES */}
-      <div className="flex flex-col gap-2 mb-4">
-        <span className="text-sm font-semibold">Tipe Sponsor</span>
-        <div className="flex flex-wrap gap-2">
-          {data.sponsorTypes.map((type, i) => (
+      <div className="mb-4">
+        <p className="font-semibold text-sm mb-2">Tipe Sponsor</p>
+        <div className="flex gap-2 flex-wrap">
+          {data.sponsorTypes.map((t, i) => (
             <span
               key={i}
-              className="px-3 py-1 bg-gray-900 text-white rounded-full text-xs whitespace-nowrap"
+              className="px-3 py-1 bg-gray-900 text-white text-xs rounded-full"
             >
-              {type}
+              {t}
             </span>
           ))}
         </div>
       </div>
 
-      {/* COVERAGE */}
-      <div className="flex flex-col gap-2 mb-4">
-        <span className="text-sm font-semibold">Cakupan Sponsor</span>
-        <span className="px-3 py-1 bg-blue-900 text-white rounded-full text-xs w-fit">
+      <div className="mb-4">
+        <p className="font-semibold text-sm mb-2">Cakupan</p>
+        <span className="px-3 py-1 bg-blue-900 text-white text-xs rounded-full">
           {data.coverage}
         </span>
       </div>
 
-      {/* BUDGET */}
-      <div className="flex flex-col gap-2 mb-6">
-        <span className="text-sm font-semibold">Budget</span>
-        <span className="px-3 py-1 bg-green-500 text-white rounded-full text-xs w-fit">
+      <div className="mb-6">
+        <p className="font-semibold text-sm mb-2">Budget</p>
+        <span className="px-3 py-1 bg-green-500 text-white text-xs rounded-full">
           {data.budget}
         </span>
       </div>
 
-      {/* BUTTON → navigate ke detail */}
-      <button
-        onClick={() => navigate(`/dashboard/sponsor/event/${data.id}`)}
-        className="mt-4 bg-blue-600 text-white px-4 py-3 rounded-xl w-full font-semibold hover:bg-blue-700 transition"
-      >
-        Ajukan
-      </button>
+      {mode === "browse" ? (
+        <button
+          onClick={() => setOpenModal(true)}
+          className="w-full bg-blue-600 text-white py-3 rounded-xl font-semibold"
+        >
+          Ajukan
+        </button>
+      ) : (
+        <button
+          onClick={() => navigate(`/proposal/${data.id}`)}
+          className="w-full bg-gray-800 text-white py-3 rounded-xl font-semibold"
+        >
+          Lihat Review
+        </button>
+      )}
+
+      <AjukanModal
+        open={openModal}
+        onClose={() => setOpenModal(false)}
+        sponsorId={data.id}
+      />
     </div>
   );
 };
 
-export default EventCard;
+export default EventCardEO;

@@ -54,3 +54,23 @@ export const getIncomingProposals = async () => {
   const res = await apiClient.get("/sponsor/incoming");
   return res.data;
 };
+
+export const getAllSponsor = async () => {
+  const res = await apiClient.get("/sponsor/all");
+  return res.data;
+};
+
+export const getFastTrackProposal = async () => {
+  const res = await apiClient.get("/proposal/fasttrack/me");
+  return res.data.proposals;
+};
+
+export const getAppliedFast = async () => {
+  const res = await apiClient.get("/events/proposals/fasttrack");
+  return res.data;
+};
+
+export const getAppliedNormal = async () => {
+  const res = await apiClient.get("/events/proposals/registered");
+  return res.data;
+};

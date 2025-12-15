@@ -1,8 +1,10 @@
 import type { FC } from "react";
 
+export type EOTabMode = "all" | "applied";
+
 interface TabsProps {
-  active: "all" | "proposal";
-  onChange: (v: "all" | "proposal") => void;
+  active: EOTabMode;
+  onChange: (v: EOTabMode) => void;
 }
 
 const DashboardTabs: FC<TabsProps> = ({ active, onChange }) => {
@@ -19,10 +21,11 @@ const DashboardTabs: FC<TabsProps> = ({ active, onChange }) => {
         >
           Daftar Sponsor
         </button>
+
         <button
-          onClick={() => onChange("proposal")}
+          onClick={() => onChange("applied")}
           className={`text-sm ${
-            active === "proposal"
+            active === "applied"
               ? "underline font-bold text-putih"
               : "text-gray-400 font-bold"
           }`}
@@ -33,4 +36,5 @@ const DashboardTabs: FC<TabsProps> = ({ active, onChange }) => {
     </div>
   );
 };
+
 export default DashboardTabs;
