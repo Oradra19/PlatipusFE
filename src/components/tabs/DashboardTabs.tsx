@@ -19,6 +19,7 @@ const DashboardTabs: FC<TabsProps> = ({ active, onChange }) => {
         >
           Daftar Semua Event
         </button>
+
         <button
           onClick={() => onChange("proposal")}
           className={`text-sm ${
@@ -33,4 +34,5 @@ const DashboardTabs: FC<TabsProps> = ({ active, onChange }) => {
     </div>
   );
 };
+
 export default DashboardTabs;

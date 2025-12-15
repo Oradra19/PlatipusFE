@@ -1,32 +1,48 @@
 import type { FC } from "react";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import DashboardLayout from "../../components/layout/DashboardLayout";
 import SponsorDashboardContent from "./SponsorDashboardContent";
 import PopupLogin from "../../components/popup/PopupLogin";
+import { getProfile } from "../../services/api";
 
 const SponsorDashboardPage: FC = () => {
   const [active, setActive] = useState<"all" | "proposal">("all");
   const [showPopup, setShowPopup] = useState(false);
 
   useEffect(() => {
-    const isProfileComplete = localStorage.getItem("profile_complete");
+    const checkProfile = async () => {
+      try {
+        const res = await getProfile();
+        const p = res.profile;
 
-    // kalau belum ada / false → popup muncul
-    if (!isProfileComplete || isProfileComplete === "false") {
-      setShowPopup(true);
-    }
+        const isComplete =
+          p?.company_name &&
+          p?.sponsor_category_id &&
+          p?.sponsor_type_id &&
+          p?.sponsor_scope_id &&
+          p?.status;
+
+        if (isComplete) {
+          localStorage.setItem("profile_complete", "true");
+          setShowPopup(false);
+        } else {
+          localStorage.setItem("profile_complete", "false");
+          setShowPopup(true);
+        }
+      } catch {
+        setShowPopup(true);
+      }
+    };
+
+    checkProfile();
   }, []);
 
   return (
     <>
-      {/* === POPUP (selalu di atas semua layout) === */}
-      {showPopup && (
-        <PopupLogin onClose={() => setShowPopup(false)} />
-      )}
+      {showPopup && <PopupLogin onClose={() => setShowPopup(false)} />}
 
-      {/* === DASHBOARD === */}
       <DashboardLayout
-        username="PT Indonesia Semakin Maju"
+        username=""
         role="sponsor"
         activeTab={active}
         onTabChange={setActive}

@@ -2,7 +2,6 @@ import {
   FaFacebookF,
   FaInstagram,
   FaTelegramPlane,
-  FaVk,
   FaTwitter,
 } from "react-icons/fa";
 import logo from "../../assets/logo.png";
@@ -33,7 +32,7 @@ const Footer = () => {
 
             {/* Sosial media */}
             <div className="flex items-center gap-3 mt-6">
-              {[FaTwitter, FaVk, FaFacebookF, FaTelegramPlane, FaInstagram].map(
+              {[FaTwitter, FaFacebookF, FaTelegramPlane, FaInstagram].map(
                 (Icon, i) => (
                   <a
                     key={i}

@@ -1,58 +1,35 @@
-import type { FC } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { getProfile } from "../../services/api";
 import logo from "../../assets/logo.png";
 
-interface NavbarProps {
-  username: string;
-  role: "sponsor" | "eo";
-}
-
-const NavbarDashboard: FC<NavbarProps> = ({ username, role }) => {
+const NavbarDashboard = () => {
   const navigate = useNavigate();
+  const [username, setUsername] = useState("Sponsor");
 
-  const handleButtonClick = () => {
-    if (role === "sponsor") {
-      // Logic lama untuk sponsor
-      navigate("/profile/sponsor");
-    } else if (role === "eo") {
-      // Logic baru untuk EO: Kembali ke Landing Page
-      navigate("/"); 
-    }
-    
-  };
-
-  // Logic Styling & Text berdasarkan Role
-  const isEO = role === "eo";
-
-  const buttonText = isEO ? "Kembali" : "Profile";
-  
-
-  // Teks sapaan
-  const displayText = isEO 
-    ? `Selamat Datang ${username}!` 
-    : username;
+  useEffect(() => {
+    getProfile()
+      .then((res) => setUsername(res.user.name))
+      .catch(() => {});
+  }, []);
 
   return (
-    <nav className="w-full bg-biru-tua text-white py-4 shadow px-4 sm:px-6 lg:px-10">
-      <div className="max-w-7xl mx-auto px-4 flex items-center justify-between">
-        
-        {/* LOGO */}
+    <nav className="w-full bg-biru-tua text-white py-4 shadow px-4">
+      <div className="max-w-7xl mx-auto flex justify-between items-center">
         <div className="flex items-center gap-3">
-          <img src={logo} alt="logo" className="w-10 h-10" />
+          <img src={logo} className="w-10 h-10" />
           <h1 className="text-2xl font-semibold text-emas">Platipus</h1>
         </div>
 
-        {/* USERNAME & BUTTON */}
         <div className="flex items-center gap-4">
-          <span className="text-sm text-abu-abu opacity-90 hidden sm:block font-medium">
-            {displayText}
+          <span className="hidden sm:block text-sm opacity-90">
+            {username}
           </span>
-
           <button
-            onClick={handleButtonClick}
-            className="bg-emas text-biru-tua font-medium px-5 py-2 rounded-md hover:bg-[#c89b33] transition text-sm"
-            >
-            {buttonText}
+            onClick={() => navigate("/profile/sponsor")}
+            className="bg-emas text-biru-tua px-5 py-2 rounded-md font-medium"
+          >
+            Profile
           </button>
         </div>
       </div>

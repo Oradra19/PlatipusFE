@@ -1,12 +1,31 @@
+import { useEffect, useState } from "react";
 import type { FC } from "react";
 import logo from "../../assets/logo.png";
+import { getProfile } from "../../services/api";
 
 const DashboardHero: FC = () => {
-  // 🔐 Ambil user dari localStorage
-  const user = localStorage.getItem("user");
-  const parsedUser = user ? JSON.parse(user) : null;
+  const [username, setUsername] = useState("Pengguna");
+  const [loading, setLoading] = useState(true);
 
-  const username = parsedUser?.name || "Pengguna";
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const res = await getProfile();
+
+        setUsername(
+          res.profile?.company_name ||
+          res.user?.name ||
+          "Pengguna"
+        );
+      } catch {
+    
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProfile();
+  }, []);
 
   return (
     <section className="bg-putih text-biru-tua py-32">
@@ -26,11 +45,12 @@ const DashboardHero: FC = () => {
         />
 
         <div className="text-center sm:text-left">
-          <h2 className="text-2xl text-biru-tua sm:text-3xl font-semibold mb-1 leading-tight">
+          <h2 className="text-2xl sm:text-3xl font-semibold mb-1 leading-tight">
             Selamat Datang di Platipus
           </h2>
-          <p className="text-base text-biru-tua sm:text-lg opacity-80">
-            {username}
+
+          <p className="text-base sm:text-lg opacity-80">
+            {loading ? "Memuat..." : username}
           </p>
         </div>
       </div>
