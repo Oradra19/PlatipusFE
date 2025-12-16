@@ -23,6 +23,22 @@ export const getSponsorMasters = async () => {
   return res.data;
 };
 
+export const getEventMasters = async () => {
+  try {
+    const res = await apiClient.get("/master/events");
+    const data = res.data?.data || res.data;
+    return {
+      categories: data.categories || [],
+      sponsorTypes: data.sponsorTypes || [],
+      sizes: data.sizes || [],
+      modes: data.modes || []
+    };
+  } catch (error) {
+    console.error("Gagal ambil master event:", error);
+    return { categories: [], sponsorTypes: [], sizes: [], modes: [] }; 
+  }
+};
+
 export const uploadProfileLogo = async (
   file: File,
   companyName: string,
@@ -104,18 +120,16 @@ export const sendProposalDecision = async (
   return res.data;
 };
 
+// 🔄 UBAH: Hapus header manual
 export const createEvent = async (eventData: FormData) => {
-  const res = await apiClient.post("/events", eventData, {
-    headers: { "Content-Type": "multipart/form-data" },
-  });
+  // Jangan set Content-Type manual! Axios akan set otomatis dengan boundary yang benar.
+  const res = await apiClient.post("/events", eventData);
   return res.data;
 };
 
-// Update Event
+// 🔄 UBAH: Hapus header manual
 export const updateEvent = async (id: string, eventData: FormData) => {
-  const res = await apiClient.put(`/events/${id}`, eventData, {
-    headers: { "Content-Type": "multipart/form-data" },
-  });
+  const res = await apiClient.put(`/events/${id}`, eventData);
   return res.data;
 };
 
