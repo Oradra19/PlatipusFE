@@ -103,3 +103,24 @@ export const sendProposalDecision = async (
   );
   return res.data;
 };
+
+export const createEvent = async (eventData: FormData) => {
+  const res = await apiClient.post("/events", eventData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+  return res.data;
+};
+
+// Update Event
+export const updateEvent = async (id: string, eventData: FormData) => {
+  const res = await apiClient.put(`/events/${id}`, eventData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+  return res.data;
+};
+
+// Hapus Event
+export const deleteEvent = async (id: string) => {
+  const res = await apiClient.delete(`/events/${id}`);
+  return res.data;
+};
