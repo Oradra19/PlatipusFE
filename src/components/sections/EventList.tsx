@@ -86,6 +86,8 @@ const EventList: FC<{ mode: "all" | "proposal" }> = ({ mode }) => {
               tags: [p.status, e.category, e.size, e.mode],
               logo: "/placeholder-event.png",
               isFastTrack: fastIds.includes(e.id),
+              proposalId: p.proposalId,
+              sponsorProfileId: p.sponsorProfileId,
             };
           })
           .filter(Boolean);

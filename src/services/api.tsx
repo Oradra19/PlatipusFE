@@ -74,3 +74,32 @@ export const getAppliedNormal = async () => {
   const res = await apiClient.get("/events/proposals/registered");
   return res.data;
 };
+
+export const getEventById = async (id: string) => {
+  const res = await apiClient.get(`/events/${id}`);
+  return res.data.event;
+};
+
+export const submitProposalFeedback = async (
+  proposalSponsorId: string,
+  status: "ACCEPTED" | "REJECTED",
+  feedback?: string
+) => {
+  const res = await apiClient.put(`/proposal/${proposalSponsorId}`, {
+    status,
+    feedback,
+  });
+  return res.data;
+};
+
+export const sendProposalDecision = async (
+  proposalId: string,
+  sponsorProfileId: string,
+  feedback?: string
+) => {
+  const res = await apiClient.post(
+    `/proposals/${proposalId}/send/${sponsorProfileId}`,
+    feedback ? { feedback } : {}
+  );
+  return res.data;
+};
