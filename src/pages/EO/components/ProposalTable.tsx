@@ -1,7 +1,7 @@
 import { useEffect, useState, type FC } from "react";
 import { FaPlus, FaTrash, FaEdit } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { getAllEvents, deleteEvent, getProfile } from "../../../services/api";
+import { getMyEvents, deleteEvent, getProfile } from "../../../services/api";
 
 // Mapping ID dari Backend ke Text yang bisa dibaca User
 const CATEGORY_MAP: Record<number, string> = { 
@@ -43,7 +43,7 @@ const ProposalTable: FC = () => {
 
       const [profileRes, eventsRes] = await Promise.all([
         getProfile(),
-        getAllEvents()
+        getMyEvents()
       ]);
 
       const userId = profileRes.user?.id; 

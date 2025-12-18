@@ -58,8 +58,13 @@ export const uploadProfileLogo = async (
 
 export const getAllEvents = async () => {
   const res = await apiClient.get("/events");
-  return res.data.events;
+  return res.data;
 };
+
+export const getMyEvents = async () => {
+  const res = await apiClient.get('/events/me');
+  return res.data;
+}
 
 export const getFastTrackEvents = async () => {
   const res = await apiClient.get("/proposal/fasttrack/me");

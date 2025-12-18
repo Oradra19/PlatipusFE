@@ -8,25 +8,50 @@ const EOAddEvent: FC = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   
-  const [masterData, setMasterData] = useState({
-    categories: [] as any[],
-    sponsorTypes: [] as any[],
-    sizes: [] as any[],
-    modes: [] as any[]
-  });
 
-  const [formData, setFormData] = useState({
+  type MasterItem = {
+    id: number;
+    name: string;
+  };
+
+  type FormState = {
+    name: string;
+    location: string;
+    startDate: string;
+    endDate: string;
+    description: string;
+    audience: string;
+    requirements: string;
+    categoryId: string;
+    typeId: string;
+    sizeId: string;
+    modeId: string;
+  };
+
+  const [masterData, setMasterData] = useState<{
+    categories: MasterItem[],
+    sponsorTypes: MasterItem[],
+    sizes: MasterItem[],
+    modes: MasterItem[],
+  }>({
+    categories: [],
+    sponsorTypes: [],
+    sizes: [],
+    modes: [],
+  })
+
+  const [formData, setFormData] = useState<FormState>({
     name: "",
     location: "",
-    startDate: "", 
+    startDate: "",
     endDate: "",
     description: "",
-    audience: "",      
+    audience: "",
     requirements: "",
     categoryId: "",
     typeId: "",
     sizeId: "",
-    modeId: ""
+    modeId: "",
   });
 
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -47,9 +72,12 @@ const EOAddEvent: FC = () => {
     loadMasters();
   }, []);
 
-  const handleChange = (e: ChangeEvent<any>) => {
-    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
-  };
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
+    const {name, value} = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value}));
+  }
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>, type: 'image' | 'proposal') => {
     if (e.target.files && e.target.files[0]) {
@@ -84,34 +112,20 @@ const EOAddEvent: FC = () => {
       payload.append("description", formData.description);
 
       // Data ID (Pastikan ID terisi)
-      payload.append("category_id", formData.categoryId);
-      payload.append("sponsor_type_id", formData.typeId); 
-      payload.append("size_id", formData.sizeId);
-      payload.append("mode_id", formData.modeId);
+      payload.append("categoryId", formData.categoryId);
+      payload.append("sponsorTypeId", formData.typeId); 
+      payload.append("sizeId", formData.sizeId);
+      payload.append("modeId", formData.modeId);
 
-      const startDateObj = new Date(formData.startDate);
-      const endDateObj = new Date(formData.endDate);
+      payload.append(
+        "startTime",
+        `${formData.startDate}T09:00:00.000Z`
+      );
 
-      // Validasi Tanggal
-      if (endDateObj < startDateObj) {
-        alert("Tanggal selesai tidak boleh sebelum tanggal mulai!");
-        setIsLoading(false);
-        return;
-      }
-
-      // Set Jam agar valid ISO
-      startDateObj.setHours(0, 0, 0, 0);
-      endDateObj.setHours(23, 59, 59, 999);
-
-payload.append(
-  "start_time",
-  `${formData.startDate}T09:00:00.000Z`
-);
-
-payload.append(
-  "end_time",
-  `${formData.endDate}T17:00:00.000Z`
-);
+      payload.append(
+        "endTime",
+        `${formData.endDate}T17:00:00.000Z`
+      );
       // Files
       if (imageFile) payload.append("image", imageFile); 
       if (proposalFile) payload.append("proposal", proposalFile);

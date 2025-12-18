@@ -4,7 +4,7 @@ import type { AxiosInstance, AxiosError } from "axios";
 const apiClient: AxiosInstance = axios.create({
   baseURL: "https://platipus-back-end.vercel.app",
   headers: {
-    "Content-Type": "application/json",
+    Accept: "application/json",
   },
 });
 
