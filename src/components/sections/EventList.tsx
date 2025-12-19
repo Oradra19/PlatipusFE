@@ -4,7 +4,6 @@ import EventCard from "../card/EventCard";
 import type { EventData } from "../../types/EventData";
 import {
   getAllEvents,
-  getIncomingProposals,
   getFastTrackEvents,
 } from "../../services/api";
 
@@ -70,7 +69,7 @@ const EventList: FC<{ mode: "all" | "proposal" }> = ({ mode }) => {
       const eventMap = new Map(events.map((e: any) => [e.id, e]));
 
       if (mode === "proposal") {
-        const incoming = await getIncomingProposals();
+        // const incoming = await getIncomingProposals();
 
         const mapped: EventData[] = incoming
           .map((p: any) => {

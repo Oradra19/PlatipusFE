@@ -9,7 +9,6 @@ import DetailContact from "../../components/detail/DetailContact";
 import {
   getEventById,
   getFastTrackEvents,
-  getIncomingProposals,
 } from "../../services/api";
 import type { EventData } from "../../types/EventData";
 
@@ -24,7 +23,7 @@ const EventDetail: FC = () => {
 
       const data = await getEventById(id);
       const fast = await getFastTrackEvents();
-      const incoming = await getIncomingProposals();
+      // const incoming = await getIncomingProposals();
 
       const fastIds = fast.map((f: any) => f.event_id);
 
