@@ -1,190 +1,283 @@
-import { useState, type FC } from "react";
+import { useState, useEffect, type FC, type ChangeEvent, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import EventFormLayout from "./components/EventFormLayout";
-import { FaCalendarAlt } from "react-icons/fa";
-import { addEvent } from "../../services/eventService";
+import { createEvent, getEventMasters } from "../../services/api";
+import { FaFilePdf } from "react-icons/fa";
 
 const EOAddEvent: FC = () => {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+  
 
-  // State untuk form input
-  const [formData, setFormData] = useState({
-    title: "",
+  type MasterItem = {
+    id: number;
+    name: string;
+  };
+
+  type FormState = {
+    name: string;
+    location: string;
+    startDate: string;
+    endDate: string;
+    description: string;
+    audience: string;
+    requirements: string;
+    categoryId: string;
+    typeId: string;
+    sizeId: string;
+    modeId: string;
+  };
+
+  const [masterData, setMasterData] = useState<{
+    categories: MasterItem[],
+    sponsorTypes: MasterItem[],
+    sizes: MasterItem[],
+    modes: MasterItem[],
+  }>({
+    categories: [],
+    sponsorTypes: [],
+    sizes: [],
+    modes: [],
+  })
+
+  const [formData, setFormData] = useState<FormState>({
+    name: "",
     location: "",
-    date: "",
-    category: "",
-    audience: "",
+    startDate: "",
+    endDate: "",
     description: "",
-    tagBudget: "",
-    tagType: "",
-    tagScale: "",
-    tagMode: ""
+    audience: "",
+    requirements: "",
+    categoryId: "",
+    typeId: "",
+    sizeId: "",
+    modeId: "",
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [proposalFile, setProposalFile] = useState<File | null>(null);
 
-  const handleSave = (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    // Buat object EventData baru
-    const newEvent = {
-      id: Date.now().toString(), // Menggunakan timestamp saat ini sebagai ID unik
-      title: formData.title,
-      location: formData.location,
-      date: formData.date,
-      audience: formData.audience,
-      category: formData.category,
-      description: formData.description,
-      tags: [formData.tagBudget, formData.tagType, formData.tagScale, formData.tagMode],
-      logo: "/logo3.png", // Placeholder logo
-      eoName: "Maulana EO",
-      eoPhoto: "/eo5.png",
-      eoEmail: "maulana@gmail.com",
-      image: "/event-prop1.png"
+  useEffect(() => {
+    const loadMasters = async () => {
+      const data = await getEventMasters();
+      if (data) {
+        setMasterData({
+          categories: data.categories || [],
+          sponsorTypes: data.sponsorTypes || [],
+          sizes: data.sizes || [],
+          modes: data.modes || []
+        });
+      }
     };
+    loadMasters();
+  }, []);
 
-    addEvent(newEvent); // Simpan ke local storage
-    navigate("/dashboard/eo"); // Kembali ke dashboard
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
+    const {name, value} = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value}));
+  }
+
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>, type: 'image' | 'proposal') => {
+    if (e.target.files && e.target.files[0]) {
+      if (type === 'image') setImageFile(e.target.files[0]);
+      else setProposalFile(e.target.files[0]);
+    }
   };
 
-  const handleCancel = () => {
-    // Reset form dan kembali
-    setFormData({
-        title: "", location: "", date: "", category: "", audience: "", 
-        description: "", tagBudget: "", tagType: "", tagScale: "", tagMode: ""
-    });
-    navigate("/dashboard/eo"); 
+  const handleSave = async (e: FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    try {
+      if (!formData.startDate || !formData.endDate) {
+        alert("Tanggal mulai dan selesai harus diisi!");
+        setIsLoading(false);
+        return;
+      }
+      if (!imageFile) {
+        alert("Wajib upload gambar poster event!");
+        setIsLoading(false);
+        return;
+      }
+
+      const payload = new FormData();
+      
+      // Data Text
+      payload.append("name", formData.name);
+      payload.append("location", formData.location);
+      payload.append("target", formData.audience);       
+      payload.append("requirements", formData.requirements);
+      payload.append("description", formData.description);
+
+      // Data ID (Pastikan ID terisi)
+      payload.append("categoryId", formData.categoryId);
+      payload.append("sponsorTypeId", formData.typeId); 
+      payload.append("sizeId", formData.sizeId);
+      payload.append("modeId", formData.modeId);
+
+      payload.append(
+        "startTime",
+        `${formData.startDate}T09:00:00.000Z`
+      );
+
+      payload.append(
+        "endTime",
+        `${formData.endDate}T17:00:00.000Z`
+      );
+      // Files
+      if (imageFile) payload.append("image", imageFile); 
+      if (proposalFile) payload.append("proposal", proposalFile);
+      
+      // Debugging: Lihat isi di Console
+      console.log("🚀 Payload:");
+      for (const pair of payload.entries()) {
+        console.log(pair[0], pair[1]);
+      }
+
+      await createEvent(payload);
+      alert("Event berhasil dibuat!");
+      navigate("/dashboard/eo");
+
+    } catch (error: any) {
+      console.error("❌ ERROR API:", error);
+      const serverMessage = error.response?.data?.message || "Gagal membuat event (Cek format data)";
+      alert(`Gagal: ${serverMessage}`);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <EventFormLayout title="Tambah Event">
-      <form onSubmit={handleSave} className="space-y-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+      <form onSubmit={handleSave} className="w-full">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
           
-          {/* === KOLOM KIRI === */}
+          {/* KOLOM KIRI */}
           <div className="space-y-6">
             <div>
-              <label className="block font-semibold mb-2 text-sm">Nama event</label>
-              <input name="title" value={formData.title} onChange={handleChange} required type="text" placeholder="Masukkan nama event" className="w-full bg-[#EAE4E4] px-4 py-3 rounded-lg outline-none text-sm" />
+                <label className="font-bold text-sm mb-2 block text-biru-tua">Nama Event <span className="text-red-500">*</span></label>
+                <input name="name" onChange={handleChange} required className="w-full bg-[#EAE4E4] px-4 py-3 rounded-xl outline-none text-sm transition focus:ring-2 focus:ring-blue-200" placeholder="Contoh: Konser Musik Amal" />
+            </div>
+            <div>
+                <label className="font-bold text-sm mb-2 block text-biru-tua">Lokasi <span className="text-red-500">*</span></label>
+                <input name="location" onChange={handleChange} required className="w-full bg-[#EAE4E4] px-4 py-3 rounded-xl outline-none text-sm transition focus:ring-2 focus:ring-blue-200" placeholder="Contoh: Jakarta Convention Center" />
+            </div>
+            
+            <div className="grid grid-cols-2 gap-4">
+                <div>
+                    <label className="font-bold text-sm mb-2 block text-biru-tua">Mulai <span className="text-red-500">*</span></label>
+                    <input name="startDate" type="date" onChange={handleChange} required className="w-full bg-[#EAE4E4] px-4 py-3 rounded-xl outline-none text-sm cursor-pointer" />
+                </div>
+                <div>
+                    <label className="font-bold text-sm mb-2 block text-biru-tua">Selesai <span className="text-red-500">*</span></label>
+                    <input name="endDate" type="date" onChange={handleChange} required className="w-full bg-[#EAE4E4] px-4 py-3 rounded-xl outline-none text-sm cursor-pointer" />
+                </div>
             </div>
 
             <div>
-              <label className="block font-semibold mb-2 text-sm">Lokasi</label>
-              <input name="location" value={formData.location} onChange={handleChange} required type="text" placeholder="Masukkan lokasi event" className="w-full bg-[#EAE4E4] px-4 py-3 rounded-lg outline-none text-sm" />
+                <label className="font-bold text-sm mb-2 block text-biru-tua">Jenis Sponsorship <span className="text-red-500">*</span></label>
+                <select name="typeId" onChange={handleChange} required className="w-full bg-[#EAE4E4] px-4 py-3 rounded-xl outline-none text-sm cursor-pointer appearance-none">
+                    <option value="">Pilih Jenis Sponsor...</option>
+                    {masterData.sponsorTypes.map((type) => (
+                        <option key={type.id} value={type.id}>{type.name}</option>
+                    ))}
+                </select>
             </div>
-
-            {/* TANGGAL MANUAL INPUT (TEXT) */}
             <div>
-              <label className="block font-semibold mb-2 text-sm">Acara berlangsung</label>
-              <div className="relative">
-                <input 
-                  name="date" 
-                  value={formData.date} 
-                  onChange={handleChange} 
-                  required 
-                  type="text" 
-                  placeholder="Contoh: 1 - 3 Agustus 2025" 
-                  className="w-full bg-[#EAE4E4] px-4 py-3 rounded-lg outline-none text-sm" 
-                />
-                <FaCalendarAlt className="absolute right-4 top-3 text-gray-500" />
-              </div>
-            </div>
-
-            <div>
-              <label className="block font-semibold mb-2 text-sm">Pilih Jenis Sponsorship</label>
-              <select name="tagType" value={formData.tagType} onChange={handleChange} className="w-full bg-[#EAE4E4] px-4 py-3 rounded-lg outline-none text-sm appearance-none cursor-pointer">
-                <option value="">Pilih Jenis Sponsor</option>
-                <option value="Dana">Dana</option>
-                <option value="Produk">Produk</option>
-              </select>
-            </div>
-
-            <div>
-              <label className="block font-semibold mb-2 text-sm">Deskripsi</label>
-              <textarea name="description" value={formData.description} onChange={handleChange} placeholder="Masukkan deskripsi event" className="w-full bg-[#EAE4E4] px-4 py-3 rounded-lg outline-none text-sm h-40 resize-none"></textarea>
+                <label className="font-bold text-sm mb-2 block text-biru-tua">Deskripsi <span className="text-red-500">*</span></label>
+                <textarea name="description" onChange={handleChange} required className="w-full bg-[#EAE4E4] px-4 py-3 rounded-xl outline-none text-sm h-40 resize-none transition focus:ring-2 focus:ring-blue-200" placeholder="Jelaskan detail acara..."></textarea>
             </div>
           </div>
 
-          {/* === KOLOM KANAN === */}
+          {/* KOLOM KANAN */}
           <div className="space-y-6">
             <div>
-              <label className="block font-semibold mb-2 text-sm">Kategori</label>
-              <select name="category" value={formData.category} onChange={handleChange} className="w-full bg-[#EAE4E4] px-4 py-3 rounded-lg outline-none text-sm appearance-none cursor-pointer">
-                <option value="">Pilih Kategori Event</option>
-                <option value="Teknologi">Teknologi</option>
-                <option value="Musik">Musik</option>
-                <option value="Pendidikan">Pendidikan</option>
-              </select>
+                <label className="font-bold text-sm mb-2 block text-biru-tua">Kategori <span className="text-red-500">*</span></label>
+                <select name="categoryId" onChange={handleChange} required className="w-full bg-[#EAE4E4] px-4 py-3 rounded-xl outline-none text-sm cursor-pointer appearance-none">
+                    <option value="">Pilih Kategori...</option>
+                    {masterData.categories.map((cat) => (
+                        <option key={cat.id} value={cat.id}>{cat.name}</option>
+                    ))}
+                </select>
             </div>
 
-            <div className="grid grid-cols-2 gap-6">
+            <div className="grid grid-cols-2 gap-4">
                 <div>
-                    <label className="block font-semibold mb-2 text-sm">Target audiens</label>
-                    <input name="audience" value={formData.audience} onChange={handleChange} type="text" placeholder="Masukkan target event" className="w-full bg-[#EAE4E4] px-4 py-3 rounded-lg outline-none text-sm" />
+                    <label className="font-bold text-sm mb-2 block text-biru-tua">Target Audiens <span className="text-red-500">*</span></label>
+                    <input name="audience" onChange={handleChange} required className="w-full bg-[#EAE4E4] px-4 py-3 rounded-xl outline-none text-sm" placeholder="Ex: Mahasiswa" />
                 </div>
                 <div>
-                    <label className="block font-semibold mb-2 text-sm">Ukuran Event</label>
-                    <select name="tagScale" value={formData.tagScale} onChange={handleChange} className="w-full bg-[#EAE4E4] px-4 py-3 rounded-lg outline-none text-sm appearance-none cursor-pointer">
-                        <option value="">Pilih ukuran</option>
-                        <option value="Kecil">Kecil</option>
-                        <option value="Sedang">Sedang</option>
-                        <option value="Besar">Besar</option>
+                    <label className="font-bold text-sm mb-2 block text-biru-tua">Ukuran Event <span className="text-red-500">*</span></label>
+                    <select name="sizeId" onChange={handleChange} required className="w-full bg-[#EAE4E4] px-4 py-3 rounded-xl outline-none text-sm cursor-pointer appearance-none">
+                        <option value="">Pilih Ukuran...</option>
+                        {masterData.sizes.map((size) => (
+                            <option key={size.id} value={size.id}>{size.name}</option>
+                        ))}
                     </select>
                 </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-6">
+            <div className="grid grid-cols-2 gap-4">
                 <div>
-                    <label className="block font-semibold mb-2 text-sm">Kebutuhan</label>
-                    <input name="tagBudget" value={formData.tagBudget} onChange={handleChange} type="text" placeholder="Contoh: 5 Juta" className="w-full bg-[#EAE4E4] px-4 py-3 rounded-lg outline-none text-sm" />
+                    <label className="font-bold text-sm mb-2 block text-biru-tua">Kebutuhan <span className="text-red-500">*</span></label>
+                    <input name="requirements" onChange={handleChange} required className="w-full bg-[#EAE4E4] px-4 py-3 rounded-xl outline-none text-sm" placeholder="Ex: Dana / Konsumsi" />
                 </div>
                 <div>
-                    <label className="block font-semibold mb-2 text-sm">Mode Event</label>
-                    <select name="tagMode" value={formData.tagMode} onChange={handleChange} className="w-full bg-[#EAE4E4] px-4 py-3 rounded-lg outline-none text-sm appearance-none cursor-pointer">
-                        <option value="">Pilih mode</option>
-                        <option value="Online">Online</option>
-                        <option value="Offline">Offline</option>
+                    <label className="font-bold text-sm mb-2 block text-biru-tua">Mode Event <span className="text-red-500">*</span></label>
+                    <select name="modeId" onChange={handleChange} required className="w-full bg-[#EAE4E4] px-4 py-3 rounded-xl outline-none text-sm cursor-pointer appearance-none">
+                        <option value="">Pilih Mode...</option>
+                        {masterData.modes.map((mode) => (
+                            <option key={mode.id} value={mode.id}>{mode.name}</option>
+                        ))}
                     </select>
                 </div>
             </div>
 
+            {/* INPUT GAMBAR (BIASA) */}
             <div>
-              <label className="block font-semibold mb-2 text-sm">Tambahkan Gambar</label>
-              <input type="file" className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100 bg-[#EAE4E4] rounded-lg p-2"/>
+                <label className="font-bold text-sm mb-2 block text-biru-tua">Upload Gambar (Poster) <span className="text-red-500">*</span></label>
+                <input 
+                    type="file" 
+                    accept="image/*" 
+                    required 
+                    onChange={(e) => handleFileChange(e, 'image')}
+                    className="w-full bg-[#EAE4E4] p-3 rounded-xl text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-biru-tua file:text-white hover:file:bg-blue-800 transition" 
+                />
+                <p className="text-[10px] text-gray-400 mt-1 ml-1">*JPG/PNG Max 2MB</p>
             </div>
 
+            {/* INPUT PROPOSAL (DROPZONE) */}
             <div>
-                <label className="block font-semibold mb-2 text-sm">Upload proposal</label>
-                <div className="border-2 border-dashed border-gray-400 rounded-lg h-32 flex items-center justify-center text-gray-500 text-sm bg-white">
-                    Upload File Proposal
+                <label className="font-bold text-sm mb-2 block text-biru-tua">Upload Proposal (PDF)</label>
+                <div className="relative border-2 border-dashed border-gray-300 rounded-xl bg-gray-50 hover:bg-gray-100 transition p-6 flex flex-col items-center justify-center text-center cursor-pointer group">
+                    <input 
+                        type="file" 
+                        accept=".pdf" 
+                        onChange={(e) => handleFileChange(e, 'proposal')}
+                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" 
+                    />
+                    <div className="text-gray-400 group-hover:text-red-500 transition mb-2">
+                        <FaFilePdf size={32} />
+                    </div>
+                    <p className="text-xs text-gray-500 font-medium">
+                        {proposalFile ? (
+                            <span className="text-green-600 font-bold">{proposalFile.name}</span>
+                        ) : (
+                            "Klik atau Tarik file PDF disini"
+                        )}
+                    </p>
+                    <p className="text-[10px] text-gray-400 mt-1">Format PDF (Max 5MB)</p>
                 </div>
             </div>
 
-            <div className="flex items-center gap-2">
-                <input type="checkbox" id="openSpon" className="w-4 h-4" />
-                <label htmlFor="openSpon" className="text-sm font-medium">Open Sponsorship</label>
-            </div>
           </div>
         </div>
 
-        {/* BUTTON ACTION */}
-        <div className="flex flex-col sm:flex-row gap-6 mt-10">
-            <button 
-                type="button" 
-                onClick={handleCancel}
-                className="flex-1 bg-red-200 text-red-600 font-bold py-3 rounded-xl hover:bg-red-300 transition"
-            >
-                Batalkan
-            </button>
-            <button 
-                type="submit" 
-                className="flex-1 bg-[#2F40D3] text-white font-bold py-3 rounded-xl hover:bg-blue-800 transition"
-            >
-                Simpan
-            </button>
+        <div className="flex gap-6 mt-12">
+           <button type="button" onClick={() => navigate("/dashboard/eo")} className="flex-1 bg-red-100 text-red-600 py-4 rounded-2xl font-bold hover:bg-red-200 transition text-sm">Batalkan</button>
+           <button type="submit" disabled={isLoading} className="flex-1 bg-[#2F40D3] text-white py-4 rounded-2xl font-bold hover:bg-blue-800 transition shadow-lg shadow-blue-500/30 disabled:bg-blue-300 text-sm">{isLoading ? "Menyimpan..." : "Simpan Event"}</button>
         </div>
       </form>
     </EventFormLayout>

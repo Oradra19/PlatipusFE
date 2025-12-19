@@ -23,6 +23,22 @@ export const getSponsorMasters = async () => {
   return res.data;
 };
 
+export const getEventMasters = async () => {
+  try {
+    const res = await apiClient.get("/master/events");
+    const data = res.data?.data || res.data;
+    return {
+      categories: data.categories || [],
+      sponsorTypes: data.sponsorTypes || [],
+      sizes: data.sizes || [],
+      modes: data.modes || []
+    };
+  } catch (error) {
+    console.error("Gagal ambil master event:", error);
+    return { categories: [], sponsorTypes: [], sizes: [], modes: [] }; 
+  }
+};
+
 export const uploadProfileLogo = async (
   file: File,
   companyName: string,
@@ -42,8 +58,13 @@ export const uploadProfileLogo = async (
 
 export const getAllEvents = async () => {
   const res = await apiClient.get("/events");
-  return res.data.events;
+  return res.data;
 };
+
+export const getMyEvents = async () => {
+  const res = await apiClient.get('/events/me');
+  return res.data;
+}
 
 export const getFastTrackEvents = async () => {
   const res = await apiClient.get("/proposal/fasttrack/me");
@@ -101,5 +122,24 @@ export const sendProposalDecision = async (
     `/proposals/${proposalId}/send/${sponsorProfileId}`,
     feedback ? { feedback } : {}
   );
+  return res.data;
+};
+
+// 🔄 UBAH: Hapus header manual
+export const createEvent = async (eventData: FormData) => {
+  // Jangan set Content-Type manual! Axios akan set otomatis dengan boundary yang benar.
+  const res = await apiClient.post("/events", eventData);
+  return res.data;
+};
+
+// 🔄 UBAH: Hapus header manual
+export const updateEvent = async (id: string, eventData: FormData) => {
+  const res = await apiClient.put(`/events/${id}`, eventData);
+  return res.data;
+};
+
+// Hapus Event
+export const deleteEvent = async (id: string) => {
+  const res = await apiClient.delete(`/events/${id}`);
   return res.data;
 };
