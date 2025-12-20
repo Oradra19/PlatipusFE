@@ -1,9 +1,9 @@
 import type { FC } from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { SimpleEOCard } from "../../services/MockEventEO";
 import AjukanModal from "./AjukanModal";
 import ReviewResultModal from "../popup/ReviewResultModal";
-import type { ReviewVariant } from "../popup/reviewVariantConfig";
+import { mapReviewVariant } from "../popup/reviewVariantConfig";
 
 export type CardMode = "browse" | "applied";
 
@@ -14,14 +14,40 @@ const EventCardEO: FC<{ data: SimpleEOCard; mode: CardMode }> = ({
   const [openModal, setOpenModal] = useState(false);
   const [openReview, setOpenReview] = useState(false);
 
-  // 🔥 DUMMY REVIEW (nanti dari BE)
-  const reviewVariant: ReviewVariant = "accepted-fasttrack";
-  const reviewComment =
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.";
+  // 🔥 DEBUG: semua data raw
+  useEffect(() => {
+    Object.entries(data).forEach(([key, value]) => {
+    });
+    console.groupEnd();
+  }, [data]);
+
+  // Ambil status & fast track
+  const status = data.status;
+  const isFastTrack = data.isFastTrack ?? false;
+
+  // Ambil feedback dari DB
+  const feedback =
+    (data as any).feedback ||
+    (data as any).review?.feedback ||
+    (data as any).proposal?.feedback ||
+    "";
+
+  // Map variant
+  const reviewVariant = mapReviewVariant(status, isFastTrack);
 
   return (
     <div className="bg-white text-black p-6 rounded-[22px] shadow-md w-full">
-      {/* LABEL */}
+      {/* 🔥 TAMBAHAN SAJA (KHUSUS APPLIED) */}
+      {mode === "applied" && data.event?.name && (
+        <div className="mb-3">
+          <p className="text-xs text-gray-500">Event yang diajukan</p>
+          <p className="text-sm font-bold text-[#071424]">
+            {data.event.name}
+          </p>
+        </div>
+      )}
+
+      {/* === ISI CARD LAMA (TIDAK DIUBAH) === */}
       <div className="flex justify-between mb-6">
         <span className="px-3 py-1 bg-gray-100 rounded-full text-xs">
           {data.category}
@@ -98,7 +124,7 @@ const EventCardEO: FC<{ data: SimpleEOCard; mode: CardMode }> = ({
         open={openReview}
         onClose={() => setOpenReview(false)}
         variant={reviewVariant}
-        comment={reviewComment}
+        feedback={feedback.trim() !== "" ? feedback : "Belum ada feedback"} // feedback selalu tampil
       />
     </div>
   );

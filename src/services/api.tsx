@@ -135,19 +135,17 @@ export const deleteEvent = async (id: string) => {
 };
 
 export const submitProposal = async (
-  id: string,
-  data: FormData
+  eventId: string,
+  payload: {
+    sponsorId: string;
+    submissionType: "FAST_TRACK" | "REGULAR";
+    proposalId: string;
+  }
 ) => {
   const res = await apiClient.post(
-    `/events/${id}/submit`,
-    data,
-    {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    }
+    `/events/${eventId}/submit`,
+    payload
   );
-
   return res.data;
 };
 

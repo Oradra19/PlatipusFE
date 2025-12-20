@@ -2,10 +2,7 @@ import { useEffect, useState } from "react";
 import type { FC } from "react";
 import EventCardEO from "../card/EventCardEO";
 import type { SimpleEOCard } from "../../services/MockEventEO";
-import {
-  getAllSponsor,
-  getSponsorEO,
-} from "../../services/api";
+import { getAllSponsor, getSponsorEO } from "../../services/api";
 
 type Mode = "all" | "applied";
 
@@ -44,11 +41,10 @@ const EventList: FC<{ mode: Mode }> = ({ mode }) => {
             status: s.status ?? "-",
             sponsorTypes: [s.type_name],
             coverage: s.scope_name,
-            budget: `Rp ${Number(s.budget_min).toLocaleString(
-              "id-ID"
-            )} - Rp ${Number(s.budget_max).toLocaleString("id-ID")}`,
+            budget: `Rp ${Number(s.budget_min).toLocaleString("id-ID")} - Rp ${Number(s.budget_max).toLocaleString("id-ID")}`,
             logo: "/placeholder-logo.png",
             isFastTrack: false,
+            feedback: s.feedback ?? "", // ⚡ pastikan feedback ada
           }));
 
           setItems(mapped);
@@ -81,25 +77,18 @@ const EventList: FC<{ mode: Mode }> = ({ mode }) => {
 
             return {
               id: sponsor.sponsor_id,
-
-              // 🔑 KEY UNIK UNTUK REACT
               submissionKey: `${p.sponsor_id}-${p.status}-${idx}`,
-
               brandName: sponsor.company_name,
               companyName: sponsor.company_name,
-              description:
-                sponsor.description ?? "Belum ada deskripsi",
+              description: sponsor.description ?? "Belum ada deskripsi",
               category: sponsor.category_name,
               status: p.status,
               sponsorTypes: [sponsor.type_name],
               coverage: sponsor.scope_name,
-              budget: `Rp ${Number(sponsor.budget_min).toLocaleString(
-                "id-ID"
-              )} - Rp ${Number(sponsor.budget_max).toLocaleString(
-                "id-ID"
-              )}`,
+              budget: `Rp ${Number(sponsor.budget_min).toLocaleString("id-ID")} - Rp ${Number(sponsor.budget_max).toLocaleString("id-ID")}`,
               logo: "/placeholder-logo.png",
               isFastTrack: p.isFastTrack,
+              feedback: p.feedback ?? "", // ⚡ pastikan feedback masuk
             };
           })
           .filter(Boolean) as SimpleEOCard[];
