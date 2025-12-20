@@ -133,3 +133,21 @@ export const deleteEvent = async (id: string) => {
   const res = await apiClient.delete(`/events/${id}`);
   return res.data;
 };
+
+export const submitProposal = async (
+  id: string,
+  data: FormData
+) => {
+  const res = await apiClient.post(
+    `/events/${id}/submit`,
+    data,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
+
+  return res.data;
+};
+

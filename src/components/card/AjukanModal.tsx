@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { FC } from "react";
+import { submitProposal } from "../../services/api";
 
 interface AjukanModalProps {
   open: boolean;
@@ -17,23 +18,26 @@ const AjukanModal: FC<AjukanModalProps> = ({
 
   if (!open) return null;
 
-  const handleSubmit = async () => {
-    if (!file) return;
+  // 🔥 SESUAI DB
+ const handleSubmit = async () => {
+  if (!file) return;
 
-    const formData = new FormData();
-    formData.append("sponsor_id", sponsorId);
-    formData.append("track", track);
-    formData.append("proposal", file);
+  const formData = new FormData();
+  formData.append("sponsorId", sponsorId);
+  formData.append(
+    "submissionType",
+    track === "fast" ? "FAST_TRACK" : "REGULAR"
+  );
+  formData.append("proposal", file);
 
-    console.log("SUBMIT PROPOSAL:", {
-      sponsorId,
-      track,
-      file,
-    });
-
-    // await submitProposal(formData);
+  try {
+    await submitProposal(sponsorId, formData);
     onClose();
-  };
+  } catch (err) {
+    console.error("SUBMIT ERROR:", err);
+  }
+};
+
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">

@@ -1,17 +1,23 @@
 import type { FC } from "react";
 import { useState } from "react";
-import type { EOProposalCard } from "../../types/EOProposalCard";
-import { useNavigate } from "react-router-dom";
+import type { SimpleEOCard } from "../../services/MockEventEO";
 import AjukanModal from "./AjukanModal";
+import ReviewResultModal from "../popup/ReviewResultModal";
+import type { ReviewVariant } from "../popup/reviewVariantConfig";
 
 export type CardMode = "browse" | "applied";
 
-const EventCardEO: FC<{ data: EOProposalCard; mode: CardMode }> = ({
+const EventCardEO: FC<{ data: SimpleEOCard; mode: CardMode }> = ({
   data,
   mode,
 }) => {
-  const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(false);
+  const [openReview, setOpenReview] = useState(false);
+
+  // 🔥 DUMMY REVIEW (nanti dari BE)
+  const reviewVariant: ReviewVariant = "accepted-fasttrack";
+  const reviewComment =
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.";
 
   return (
     <div className="bg-white text-black p-6 rounded-[22px] shadow-md w-full">
@@ -75,7 +81,7 @@ const EventCardEO: FC<{ data: EOProposalCard; mode: CardMode }> = ({
         </button>
       ) : (
         <button
-          onClick={() => navigate(`/proposal/${data.id}`)}
+          onClick={() => setOpenReview(true)}
           className="w-full bg-gray-800 text-white py-3 rounded-xl font-semibold"
         >
           Lihat Review
@@ -86,6 +92,13 @@ const EventCardEO: FC<{ data: EOProposalCard; mode: CardMode }> = ({
         open={openModal}
         onClose={() => setOpenModal(false)}
         sponsorId={data.id}
+      />
+
+      <ReviewResultModal
+        open={openReview}
+        onClose={() => setOpenReview(false)}
+        variant={reviewVariant}
+        comment={reviewComment}
       />
     </div>
   );
