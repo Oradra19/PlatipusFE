@@ -2,8 +2,7 @@ import type { FC } from "react";
 import { FaFilePdf } from "react-icons/fa";
 import { useState } from "react";
 import type { EventData } from "../../types/EventData";
-import { submitProposalFeedback } from "../../services/api";
-import { sendProposalDecision } from "../../services/api";
+import { reviewIncomingProposal } from "../../services/apiGsn";
 
 interface Props {
   open: boolean;
@@ -15,19 +14,15 @@ const ConfirmModal: FC<Props> = ({ open, onClose, event }) => {
   const [feedback, setFeedback] = useState("");
   const [loading, setLoading] = useState(false);
 
-  if (!open) return null;
+  if (!open || !event.eventSponsorId) return null;
 
-  const isFastTrack = event.isFastTrack === true;
-
-  const handleSubmit = async () => {
-    if (!event.proposalId || !event.sponsorProfileId) return;
-
+  const handleSubmit = async (decision: "ACCEPT" | "REJECT") => {
     setLoading(true);
 
-    await sendProposalDecision(
-      event.proposalId,
-      event.sponsorProfileId,
-      isFastTrack ? feedback : undefined
+    await reviewIncomingProposal(
+      event.eventSponsorId,
+      decision,
+      event.isFastTrack ? feedback || null : null
     );
 
     setLoading(false);
@@ -36,60 +31,54 @@ const ConfirmModal: FC<Props> = ({ open, onClose, event }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 px-4">
-      <div className="bg-white rounded-2xl w-full max-w-3xl shadow-xl overflow-hidden relative">
-        <div className="bg-biru-tua text-white text-center py-6 relative">
-          <h2 className="text-2xl font-bold">Detail Event</h2>
-          <div className="w-full h-2 bg-emas absolute bottom-0 left-0"></div>
+    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+      <div className="bg-white rounded-2xl w-full max-w-3xl overflow-hidden">
+
+        <div className="bg-biru-tua text-white py-6 text-center relative">
+          <h2 className="text-2xl font-bold">Konfirmasi Proposal</h2>
           <button
             onClick={onClose}
-            className="absolute right-4 top-4 text-white/70 hover:text-white text-xl"
+            className="absolute right-4 top-4 text-xl"
           >
             ✕
           </button>
         </div>
 
         <div className="p-8">
-          <div className="border rounded-xl p-4 flex items-start gap-4 shadow-sm mb-8">
-            <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
+          <div className="border p-4 rounded-xl flex gap-4 mb-8">
+            <div className="w-12 h-12 bg-red-100 flex items-center justify-center rounded-lg">
               <FaFilePdf size={26} className="text-red-600" />
             </div>
-
             <div>
               <h3 className="font-semibold">{event.title}</h3>
               <p className="text-sm text-gray-600">{event.location}</p>
             </div>
           </div>
 
-          {isFastTrack && (
-            <div className="mb-10">
-              <label className="font-medium text-sm">
-                Tanggapan<span className="text-red-500">*</span>
-              </label>
-              <textarea
-                value={feedback}
-                onChange={(e) => setFeedback(e.target.value)}
-                className="w-full mt-2 bg-gray-100 rounded-xl p-4 h-40 outline-none"
-                placeholder="Berikan tanggapan mengenai event"
-              />
-            </div>
+          {event.isFastTrack && (
+            <textarea
+              value={feedback}
+              onChange={(e) => setFeedback(e.target.value)}
+              placeholder="Feedback (wajib)"
+              className="w-full bg-gray-100 rounded-xl p-4 h-36 mb-8"
+            />
           )}
 
-          <div className="flex flex-col sm:flex-row justify-between gap-4 mt-6">
+          <div className="flex gap-4">
             <button
               disabled={loading}
-              onClick={() => handleSubmit("REJECTED")}
-              className="w-full sm:w-1/2 py-3 bg-red-200 text-red-700 font-semibold rounded-xl hover:bg-red-300 transition disabled:opacity-60"
+              onClick={() => handleSubmit("REJECT")}
+              className="w-1/2 bg-red-200 text-red-700 py-3 rounded-xl"
             >
-              Tolak Event
+              Tolak
             </button>
 
             <button
               disabled={loading}
-              onClick={() => handleSubmit("ACCEPTED")}
-              className="w-full sm:w-1/2 py-3 bg-green-600 text-white font-semibold rounded-xl hover:bg-green-700 transition disabled:opacity-60"
+              onClick={() => handleSubmit("ACCEPT")}
+              className="w-1/2 bg-green-600 text-white py-3 rounded-xl"
             >
-              Terima Event
+              Terima
             </button>
           </div>
         </div>

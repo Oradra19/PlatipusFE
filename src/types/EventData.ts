@@ -7,7 +7,10 @@ export interface EventData {
   tags: string[];
   logo: string;
   image?: string;
+  description?: string;
+  proposalUrl?: string;
   isFastTrack: boolean;
-  proposalId?: string;
-  sponsorProfileId?: string;
+  proposalSponsorId?: string;
+  isFromIncoming: boolean;
+  eventSponsorId?: string;
 }

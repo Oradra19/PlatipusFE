@@ -4,8 +4,9 @@ import EventCard from "../card/EventCard";
 import type { EventData } from "../../types/EventData";
 import {
   getAllEvents,
-  getFastTrackEvents,
-} from "../../services/api";
+  getIncomingProposals,
+} from "../../services/apiGsn";
+
 
 const PaginationBox: FC<{
   current: number;
@@ -64,16 +65,19 @@ const EventList: FC<{ mode: "all" | "proposal" }> = ({ mode }) => {
       setPage(1);
 
       const events = await getAllEvents();
-      const fastTrack = await getFastTrackEvents();
-      const fastIds = fastTrack.map((f: any) => f.event_id);
+      const incoming = await getIncomingProposals();
+
       const eventMap = new Map(events.map((e: any) => [e.id, e]));
 
       if (mode === "proposal") {
-        // const incoming = await getIncomingProposals();
+        const allIncoming = [
+          ...(incoming.fastTrack || []),
+          ...(incoming.regular || []),
+        ];
 
-        const mapped: EventData[] = incoming
+        const mapped: EventData[] = allIncoming
           .map((p: any) => {
-            const e = eventMap.get(p.event.id);
+            const e = eventMap.get(p.eventId);
             if (!e) return null;
 
             return {
@@ -82,11 +86,15 @@ const EventList: FC<{ mode: "all" | "proposal" }> = ({ mode }) => {
               location: e.location,
               date: new Date(e.start_time).toLocaleDateString("id-ID"),
               audience: e.mode,
-              tags: [p.status, e.category, e.size, e.mode],
+              tags: [
+                p.status,
+                e.category,
+                e.size,
+                e.mode,
+              ],
               logo: "/placeholder-event.png",
-              isFastTrack: fastIds.includes(e.id),
-              proposalId: p.proposalId,
-              sponsorProfileId: p.sponsorProfileId,
+              isFastTrack: p.submissionType === "FAST_TRACK",
+              proposalSponsorId: p.eventSponsorId,
             };
           })
           .filter(Boolean);
@@ -102,9 +110,14 @@ const EventList: FC<{ mode: "all" | "proposal" }> = ({ mode }) => {
         location: e.location,
         date: new Date(e.start_time).toLocaleDateString("id-ID"),
         audience: e.mode,
-        tags: [e.category, e.sponsorType, e.size, e.mode],
+        tags: [
+          e.category,
+          e.sponsorType,
+          e.size,
+          e.mode,
+        ],
         logo: "/placeholder-event.png",
-        isFastTrack: fastIds.includes(e.id),
+        isFastTrack: false,
       }));
 
       setItems(mapped);
@@ -139,7 +152,7 @@ const EventList: FC<{ mode: "all" | "proposal" }> = ({ mode }) => {
 
   return (
     <section className="max-w-7xl mx-auto">
-      {fast.length > 0 && (
+      {mode === "proposal" && fast.length > 0 && (
         <section className="bg-emas/70 p-6 rounded-lg mb-10">
           <div className="inline-block text-putih font-bold px-3 py-1 rounded-t-md mb-4">
             FAST TRACK EVENT

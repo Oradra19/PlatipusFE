@@ -1,19 +1,21 @@
 import type { FC } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
+
 import EventDetailLayout from "../../components/layout/EventDetailLayout";
 import DetailHeader from "../../components/detail/DetailHeader";
 import DetailContent from "../../components/detail/DetailContent";
 import DetailInfo from "../../components/detail/DetailInfo";
 import DetailContact from "../../components/detail/DetailContact";
-import {
-  getEventById,
-  getFastTrackEvents,
-} from "../../services/api";
+import { getEventById } from "../../services/api";
+import { getIncomingProposals } from "../../services/apiGsn";
 import type { EventData } from "../../types/EventData";
 
 const EventDetail: FC = () => {
   const { id } = useParams();
+  const location = useLocation();
+  const fromProposal = location.state?.fromProposal === true;
+
   const [event, setEvent] = useState<EventData | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -22,14 +24,14 @@ const EventDetail: FC = () => {
       if (!id) return;
 
       const data = await getEventById(id);
-      const fast = await getFastTrackEvents();
-      // const incoming = await getIncomingProposals();
+      const incoming = await getIncomingProposals();
 
-      const fastIds = fast.map((f: any) => f.event_id);
+      const allIncoming = [
+        ...(incoming.fastTrack || []),
+        ...(incoming.regular || []),
+      ];
 
-      const proposal = incoming.find(
-        (p: any) => p.event.id === id
-      );
+      const proposal = allIncoming.find((p: any) => p.eventId === id);
 
       const mapped: EventData = {
         id: data.id,
@@ -41,10 +43,11 @@ const EventDetail: FC = () => {
         tags: [data.category, data.sponsorType, data.size, data.mode],
         logo: "/placeholder-event.png",
         image: data.image_url || "/Logo.png",
-        isFastTrack: fastIds.includes(data.id),
-        proposalSponsorId: proposal?.proposalSponsorId,
-        proposalId: proposal?.proposalId,
-        sponsorProfileId: proposal?.sponsorProfileId,
+        proposalUrl: data.proposal_url || undefined,
+
+        isFromIncoming: fromProposal,
+        isFastTrack: proposal?.submissionType === "FAST_TRACK",
+        eventSponsorId: proposal?.eventSponsorId,
       };
 
       setEvent(mapped);
@@ -52,14 +55,12 @@ const EventDetail: FC = () => {
     };
 
     load();
-  }, [id]);
+  }, [id, fromProposal]);
 
   if (loading) {
     return (
       <EventDetailLayout username="PT Indonesia Semakin Maju">
-        <div className="p-20 text-center text-biru-tua">
-          Memuat detail event...
-        </div>
+        <div className="p-20 text-center">Memuat detail event...</div>
       </EventDetailLayout>
     );
   }
@@ -67,32 +68,37 @@ const EventDetail: FC = () => {
   if (!event) {
     return (
       <EventDetailLayout username="PT Indonesia Semakin Maju">
-        <div className="p-20 text-center text-biru-tua">
-          Event tidak ditemukan
-        </div>
+        <div className="p-20 text-center">Event tidak ditemukan</div>
       </EventDetailLayout>
     );
   }
 
   return (
     <EventDetailLayout username="PT Indonesia Semakin Maju">
-      <div className="w-full max-w-7xl mx-auto px-4 sm:px-8 pt-10 pb-6">
+      <div className="max-w-7xl mx-auto px-6 pt-10">
         <DetailHeader event={event} />
       </div>
 
-      <div className="w-full mt-4">
-        <div className="w-full bg-putih rounded-t-[48px] border-t-2 border-black">
-          <div className="max-w-7xl mx-auto px-4 sm:px-8 py-10">
-            <DetailContent event={event} />
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mt-12">
-              <DetailInfo event={event} />
-              <DetailContact event={event} />
-            </div>
-            <div className="flex justify-center mt-10">
-              <button className="px-8 py-3 border border-biru-tua text-biru-tua rounded-lg hover:bg-biru-tua hover:text-putih transition">
+      <div className="bg-putih rounded-t-[48px] border-t-2 border-black mt-6">
+        <div className="max-w-7xl mx-auto px-6 py-10">
+          <DetailContent event={event} />
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mt-12">
+            <DetailInfo event={event} />
+            <DetailContact event={event} />
+          </div>
+
+          <div className="flex justify-center gap-4 mt-10">
+            {event.proposalUrl && (
+              <a
+                href={event.proposalUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-8 py-3 border border-biru-tua rounded-lg hover:bg-biru-tua hover:text-putih transition"
+              >
                 Lihat Proposal
-              </button>
-            </div>
+              </a>
+            )}
           </div>
         </div>
       </div>
