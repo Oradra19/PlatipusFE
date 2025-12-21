@@ -7,6 +7,11 @@ import {
   getIncomingProposals,
 } from "../../services/apiGsn";
 
+const statusPriority: Record<string, number> = {
+  PENDING: 0,
+  APPROVED: 1,
+  REJECTED: 2,
+};
 
 const PaginationBox: FC<{
   current: number;
@@ -56,6 +61,7 @@ const EventList: FC<{ mode: "all" | "proposal" }> = ({ mode }) => {
   const [items, setItems] = useState<EventData[]>([]);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
+
   const perPage = 12;
 
   useEffect(() => {
@@ -68,6 +74,7 @@ const EventList: FC<{ mode: "all" | "proposal" }> = ({ mode }) => {
       const incoming = await getIncomingProposals();
 
       const eventMap = new Map(events.map((e: any) => [e.id, e]));
+      const today = new Date();
 
       if (mode === "proposal") {
         const allIncoming = [
@@ -76,6 +83,14 @@ const EventList: FC<{ mode: "all" | "proposal" }> = ({ mode }) => {
         ];
 
         const mapped: EventData[] = allIncoming
+          .filter((p: any) => {
+            const e = eventMap.get(p.eventId);
+            if (!e) return false;
+
+            const eventStart = new Date(e.start_time);
+            return eventStart > today;
+          })
+
           .map((p: any) => {
             const e = eventMap.get(p.eventId);
             if (!e) return null;
@@ -87,7 +102,7 @@ const EventList: FC<{ mode: "all" | "proposal" }> = ({ mode }) => {
               date: new Date(e.start_time).toLocaleDateString("id-ID"),
               audience: e.mode,
               tags: [
-                p.status,
+                p.status,     
                 e.category,
                 e.size,
                 e.mode,
@@ -95,9 +110,16 @@ const EventList: FC<{ mode: "all" | "proposal" }> = ({ mode }) => {
               logo: "/placeholder-event.png",
               isFastTrack: p.submissionType === "FAST_TRACK",
               proposalSponsorId: p.eventSponsorId,
+              proposalStatus: p.status,
             };
           })
-          .filter(Boolean);
+          .filter(Boolean)
+     
+          .sort(
+            (a: any, b: any) =>
+              statusPriority[a.proposalStatus] -
+              statusPriority[b.proposalStatus]
+          );
 
         setItems(mapped);
         setLoading(false);
