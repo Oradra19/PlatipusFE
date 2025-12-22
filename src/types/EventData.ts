@@ -5,7 +5,7 @@ export interface EventData {
   date: string;
   audience: string;
   tags: string[];
-  logo: string;
+  logo: string | null;
   image?: string;
   description?: string;
   proposalUrl?: string;
@@ -13,4 +13,8 @@ export interface EventData {
   proposalSponsorId?: string;
   isFromIncoming: boolean;
   eventSponsorId?: string;
+  proposalStatus?: "PENDING" | "APPROVED" | "REJECTED";
+  eoName?: string;
+  eoPhoto?: string;
+  category?: string;
 }

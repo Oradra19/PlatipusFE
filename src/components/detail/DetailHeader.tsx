@@ -1,11 +1,12 @@
 import type { FC } from "react";
-import type { EventData } from "../../services/mockEvent";
 import { useState } from "react";
+import type { EventData } from "../../types/EventData";
 import ConfirmModal from "./ConfirmModal";
 import { FaCalendar, FaMapMarkerAlt } from "react-icons/fa";
 
 const DetailHeader: FC<{ event: EventData }> = ({ event }) => {
   const [openModal, setOpenModal] = useState(false);
+
   return (
     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
       {/* LEFT — EO INFO */}
@@ -14,7 +15,7 @@ const DetailHeader: FC<{ event: EventData }> = ({ event }) => {
         <div className="w-14 h-14 rounded-xl border-2 border-emas p-1">
           <img
             src={event.eoPhoto || "/default-profile.png"}
-            alt={event.eoName}
+            alt={event.eoName || "EO"}
             className="w-full h-full object-cover rounded-lg"
           />
         </div>
@@ -29,7 +30,7 @@ const DetailHeader: FC<{ event: EventData }> = ({ event }) => {
           <p className="text-xs text-gray-600 mb-1">
             Kategori :{" "}
             <span className="font-medium text-biru-tua">
-              {event.category || "Event"}
+              {event.category || "-"}
             </span>
           </p>
 
@@ -61,7 +62,6 @@ const DetailHeader: FC<{ event: EventData }> = ({ event }) => {
           event={event}
         />
 
-        {/* STATUS */}
         <span className="bg-green-500/90 text-white px-4 py-2 text-xs rounded-md font-medium">
           Status : Terbuka untuk Sponsor
         </span>

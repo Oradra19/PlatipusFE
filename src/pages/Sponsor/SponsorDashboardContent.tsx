@@ -1,8 +1,14 @@
-import type { FC } from "react";
 import EventList from "../../components/sections/EventList";
+import type { EventFilter } from "../../types/Filter";
 
-const SponsorDashboardContent: FC<{ active: "all" | "proposal" }> = ({ active }) => {
-  return <EventList mode={active} />;
+const SponsorDashboardContent = ({
+  active,
+  filters,
+}: {
+  active: "all" | "proposal";
+  filters: EventFilter;
+}) => {
+  return <EventList mode={active} filters={filters} />;
 };
 
 export default SponsorDashboardContent;

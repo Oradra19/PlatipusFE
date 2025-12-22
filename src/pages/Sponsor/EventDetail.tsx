@@ -44,7 +44,9 @@ const EventDetail: FC = () => {
         logo: "/placeholder-event.png",
         image: data.image_url || "/Logo.png",
         proposalUrl: data.proposal_url || undefined,
-
+        eoName: data.eo_name,
+        eoPhoto: data.eo_picture_url,
+        category: data.category,
         isFromIncoming: fromProposal,
         isFastTrack: proposal?.submissionType === "FAST_TRACK",
         eventSponsorId: proposal?.eventSponsorId,

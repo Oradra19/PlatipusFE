@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import type { EventData } from "../../services/mockEvent";
+import type { EventData } from "../../types/EventData";
 import { useNavigate } from "react-router-dom";
 
 const EventCard: FC<{ data: EventData }> = ({ data }) => {
@@ -10,9 +10,11 @@ const EventCard: FC<{ data: EventData }> = ({ data }) => {
 
       {/* TOP LABELS */}
       <div className="flex items-center justify-between w-full mb-6 flex-wrap gap-3">
-        <span className="px-3 py-1 bg-gray-100 rounded-full text-xs font-medium whitespace-nowrap">
-          Teknologi
-        </span>
+        {data.category && (
+          <span className="text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-medium">
+            {data.category}
+          </span>
+        )}
         <span className="px-3 py-1 bg-yellow-400 rounded-full text-xs font-medium whitespace-nowrap">
           Open Sponsorship
         </span>

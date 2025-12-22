@@ -1,7 +1,7 @@
 import type { FC, ReactNode } from "react";
 import NavbarDashboard from "../common/NavbarDashboardEO";
 import DashboardHero from "../hero/DashboardHero";
-import SidebarFilter from "../filters/SidebarFilter";
+import SidebarFilter from "../filters/SidebarFilterEO";
 import DashboardTabs from "../tabs/DashboardTabsEO";
 import Footer from "../common/Footer";
 

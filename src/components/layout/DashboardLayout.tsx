@@ -1,9 +1,11 @@
 import type { FC, ReactNode } from "react";
+import { useState, cloneElement } from "react";
 import NavbarDashboard from "../common/NavbarDashboard";
 import DashboardHero from "../hero/DashboardHero";
 import SidebarFilter from "../filters/SidebarFilter";
 import DashboardTabs from "../tabs/DashboardTabs";
 import Footer from "../common/Footer";
+import type { EventFilter } from "../../types/Filter";
 
 interface DashboardLayoutProps {
   username: string;
@@ -20,10 +22,16 @@ const DashboardLayout: FC<DashboardLayoutProps> = ({
   activeTab,
   onTabChange,
 }) => {
+  const [filters, setFilters] = useState<EventFilter>({
+    categories: [],
+    locations: [],
+    sponsorTypes: [],
+    modes: [],
+  });
+
   return (
     <div className="min-h-screen bg-biru-tua text-white">
-      {/* NAV + HERO */}
-      <NavbarDashboard username={username} role="sponsor" />
+      <NavbarDashboard username={username} role={role} />
       <DashboardHero username={username} />
 
       <div className="w-full bg-biru-tua rounded-t-[60px] -mt-10 pt-10 pb-16">
@@ -31,14 +39,22 @@ const DashboardLayout: FC<DashboardLayoutProps> = ({
           {activeTab && onTabChange && (
             <DashboardTabs active={activeTab} onChange={onTabChange} />
           )}
+
           <div className="flex flex-col lg:flex-row gap-8 mt-8">
             <div className="lg:w-72 w-full">
-              <SidebarFilter />
+              <SidebarFilter
+                filters={filters}
+                onChange={setFilters}
+              />
             </div>
-            <div className="flex-1 min-w-[calc(100%-18rem)]">{children}</div>
+
+            <div className="flex-1 min-w-[calc(100%-18rem)]">
+              {cloneElement(children as any, { filters })}
+            </div>
           </div>
         </div>
       </div>
+
       <Footer />
     </div>
   );
