@@ -3,9 +3,6 @@ import { FaPlus, FaTrash, FaEdit } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { deleteEvent, getEventMasters, getMyEvents } from "../../../services/api";
 
-/* =====================
-   TYPES
-===================== */
 
 interface Event {
   id: string;
@@ -34,7 +31,7 @@ interface Event {
 }
 
 interface MasterItem {
-  id: string;
+  id: number;
   name: string;
 }
 
@@ -50,9 +47,6 @@ interface MyEventsResponse {
   data: Event[];
 }
 
-/* =====================
-   COMPONENT
-===================== */
 
 const ProposalTable: FC = () => {
   const navigate = useNavigate();
@@ -67,14 +61,10 @@ const ProposalTable: FC = () => {
     modes: [],
   });
 
-  /* =====================
-     FETCH DATA
-  ===================== */
 
   const fetchData = async () => {
     setLoading(true);
     try {
-      // ⚠️ URUTAN PENTING
       const [eventsRes, masterRes] = await Promise.all([
         getMyEvents() as Promise<MyEventsResponse>,
         getEventMasters() as Promise<EventMasters>,
@@ -89,7 +79,7 @@ const ProposalTable: FC = () => {
         modes: masterRes.modes ?? [],
       });
     } catch (error) {
-      console.error("❌ Gagal memuat data:", error);
+      console.error("Gagal memuat data:", error);
       setEvents([]);
     } finally {
       setLoading(false);
@@ -100,9 +90,6 @@ const ProposalTable: FC = () => {
     fetchData();
   }, []);
 
-  /* =====================
-     DELETE
-  ===================== */
 
   const handleDelete = async (id: string) => {
     if (!window.confirm("Apakah Anda yakin ingin menghapus proposal event ini?")) {
@@ -118,9 +105,6 @@ const ProposalTable: FC = () => {
     }
   };
 
-  /* =====================
-     HELPERS
-  ===================== */
 
   const formatDate = (isoStr?: string): string => {
     if (!isoStr) return "-";
@@ -131,23 +115,24 @@ const ProposalTable: FC = () => {
     });
   };
 
-  const formatRupiah = (value?: string | number): string => {
-    if (value === undefined || value === null) return "-";
-    const num = Number(value);
-    if (Number.isNaN(num)) return "-";
-    return new Intl.NumberFormat("id-ID", {
-      style: "currency",
-      currency: "IDR",
-      minimumFractionDigits: 0,
-    }).format(num);
-  };
+  // const formatRupiah = (value?: string | number): string => {
+  //   if (value === undefined || value === null) return "-";
+  //   const num = Number(value);
+  //   if (Number.isNaN(num)) return "-";
+  //   return new Intl.NumberFormat("id-ID", {
+  //     style: "currency",
+  //     currency: "IDR",
+  //     minimumFractionDigits: 0,
+  //   }).format(num);
+  // };
 
   const getMasterName = (
     id: string | undefined | null,
     list: MasterItem[]
   ): string => {
     if (!id) return "-";
-    const found = list.find(item => item.id === id);
+    if(id === undefined || id === null) return "-";
+    const found = list.find(item => item.id === Number(id));
     return found ? found.name : "-";
   };
 
@@ -164,9 +149,6 @@ const ProposalTable: FC = () => {
     return undefined;
   };
 
-  /* =====================
-     RENDER (UNCHANGED)
-  ===================== */
 
   return (
     <div className="bg-white rounded-[30px] p-8 md:p-10 shadow-sm w-full mt-8">
@@ -252,8 +234,8 @@ const ProposalTable: FC = () => {
                     <td className="py-5 px-4 align-top">
                       {getMasterName(typeId, masterData.sponsorTypes)}
                     </td>
-                    <td className="py-5 px-4 align-top text-blue-600 font-bold whitespace-nowrap">
-                      {formatRupiah(event.requirements)}
+                    <td className="py-5 px-4 align-top  whitespace-nowrap">
+                      {event.requirements}
                     </td>
                     <td className="py-5 px-4 align-top">
                       {getMasterName(sizeId, masterData.sizes)}
