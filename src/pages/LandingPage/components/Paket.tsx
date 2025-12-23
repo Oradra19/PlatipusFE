@@ -22,6 +22,7 @@ const Paket = () => {
         "Proposal ditinjau lebih cepat",
         "Profil EO tampil di urutan atas pencarian",
         "Mendapatkan slot prioritas saat sponsor mencari partner",
+        "Respon tindak lanjut proposal yang direview",
       ],
       highlight: true,
     },

@@ -6,7 +6,7 @@ const SponsorPreview = () => {
 
   const sponsors = [
     {
-      logo: "/logos/logo1.png",
+      logo: "/logo/logo1.png",
       name: "CV. Overlogic Universe",
       category: "Teknologi",
       description:
@@ -16,7 +16,7 @@ const SponsorPreview = () => {
       status: "open",
     },
     {
-      logo: "/logos/logo2.png",
+      logo: "/logo/logo2.png",
       name: "Logipus Corp",
       category: "Teknologi",
       description:
@@ -26,7 +26,7 @@ const SponsorPreview = () => {
       status: "close",
     },
     {
-      logo: "/logos/logo3.png",
+      logo: "/logo/logo3.png",
       name: "NeoBright Media",
       category: "Media & Komunikasi",
       description:
@@ -36,7 +36,7 @@ const SponsorPreview = () => {
       status: "open",
     },
     {
-      logo: "/logos/logo4.png",
+      logo: "/logo/logo4.png",
       name: "GreenField Indonesia",
       category: "Lingkungan",
       description:
@@ -46,7 +46,7 @@ const SponsorPreview = () => {
       status: "close",
     },
     {
-      logo: "/logos/logo5.png",
+      logo: "/logo/logo5.png",
       name: "BrightSpark Agency",
       category: "Kreatif",
       description:
@@ -56,7 +56,7 @@ const SponsorPreview = () => {
       status: "open",
     },
     {
-      logo: "/logos/logo6.png",
+      logo: "/logo/logo6.png",
       name: "Eduverse Labs",
       category: "Edukasi",
       description:
@@ -90,7 +90,7 @@ const SponsorPreview = () => {
       <div className="mt-12">
         <button
           onClick={() => navigate("/login")}
-          className="px-6 py-2.5 md:px-7 md:py-3 bg-emas text-biru-tua font-semibold rounded-lg hover:bg-yellow-400 transition text-sm md:text-base"
+          className="px-6 py-2.5 md:px-7 md:py-3 bg-emas text-biru-tua font-semibold rounded-lg hover:bg-yellow-200 transition text-sm md:text-base"
         >
           Lihat Lebih Banyak
         </button>
