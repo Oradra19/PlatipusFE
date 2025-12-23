@@ -1,4 +1,5 @@
-import { REVIEW_VARIANT_CONFIG, ReviewVariant } from "./reviewVariantConfig";
+import { REVIEW_VARIANT_CONFIG } from "./reviewVariantConfig";
+import type { ReviewVariant } from "./reviewVariantConfig";
 
 interface Props {
   open: boolean;
