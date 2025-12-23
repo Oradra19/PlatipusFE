@@ -1,4 +1,4 @@
-import user1 from "../../../assets/logo.png";
+import user1 from "../../../assets/Logo.png";
 
 const testimonials = [
   {
